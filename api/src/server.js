@@ -9,6 +9,6 @@ server.get('/', (request, response) => {
     response.send("Hello World!");
 });
 
-server.listen(process.env.PORT || 8080, () => {
-    console.log(`[${config.env}] todo-be started on port: http://localhost:${config.port}...`);
+server.listen(config.port || 8080, () => {
+    console.log(`[${config.env}] todo-be started on port: http://localhost:${config.port || 8080}...`);
 });
