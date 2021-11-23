@@ -1,0 +1,23 @@
+{
+  "name": "todo-app-assignment-be",
+  "version": "0.0.1",
+  "description": "Backend application for our todo app assignment",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "start:dev": "nodemon -r dotenv/config src/server.js",
+    "eslint": "eslint src/**",
+    "test": "jest tests"
+  },
+  "author": "Hou Fai Man, Saeed Afzal, Samuel Crispin",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "eslint": "^8.3.0",
+    "express": "^4.17.1",
+    "jest": "^27.3.1",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.15"
+  }
+}
