@@ -18,7 +18,7 @@ server.use(cors());
 server.use("/", DefaultRoute);
 
 server.listen(PORT, () => {
-    console.log(`todo-be started on port: ${PORT}`);
+    console.log(`todo-be started on port: http://localhost:${PORT}`);
 });
 
 export default server;
