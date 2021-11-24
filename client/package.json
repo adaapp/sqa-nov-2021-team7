@@ -1,5 +1,5 @@
 {
-  "name": "todo-app-fe",
+  "name": "todo-app-assignment-fe",
   "version": "0.0.0",
   "description": "Frontend application for our todo app assignment",
   "scripts": {
@@ -13,6 +13,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^1.0.0",
+    "jest": "^27.3.1",
     "less": "^4.1.2",
     "vite": "^2.6.4"
   }
