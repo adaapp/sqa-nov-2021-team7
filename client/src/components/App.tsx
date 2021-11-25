@@ -1,9 +1,9 @@
-import '../styles/App.less'
+import List from "./List";
 
-function App() {
-  return (
+const App = () => {
+    return (
         <div>
-          Hello world
+            <List listItems={['string1', 'string2']} />
         </div>
     )
 }
