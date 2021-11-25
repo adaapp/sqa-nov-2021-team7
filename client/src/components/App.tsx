@@ -1,11 +1,7 @@
-import '../styles/App.less'
+import "../styles/App.less";
 
-function App() {
-  return (
-        <div>
-          Hello world
-        </div>
-    )
-}
+const App = () => {
+    return <div>Hello world</div>;
+};
 
-export default App
+export default App;
