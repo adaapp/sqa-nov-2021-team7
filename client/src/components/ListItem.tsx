@@ -9,7 +9,7 @@ type ListItemProps = {
 const Message = styled.div`
     display: inline-block;
     width: calc(100% - 20px);
-`
+`;
 
 const ListItemStyled = styled.div`
     border: 1px solid black;
@@ -17,7 +17,7 @@ const ListItemStyled = styled.div`
     padding: 5px;
     margin-bottom: 5px;
     box-shadow: 2px 4px 2px #888888;
-`
+`;
 
 const ListItem = (props: ListItemProps) => {
     return (
@@ -25,7 +25,7 @@ const ListItem = (props: ListItemProps) => {
             <Message>{props.message}</Message>
             <Button onClick={() => console.log('Remove item api call here')}/>
         </ListItemStyled>
-    )
-}
+    );
+};
 
 export default ListItem;

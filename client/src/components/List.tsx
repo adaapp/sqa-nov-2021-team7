@@ -8,17 +8,16 @@ interface ListProps {
 
 const ListContainer = styled.div`
     position: relative;
-`
+`;
 
 const List = (props: ListProps) => {
-    const message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu"
     return (
         <ListContainer>
             {props.listItems.map((item, index) => {
-                return <ListItem message={message} key={index}/>
+                return <ListItem message={props.listItems[index]} key={index}/>;
             })}
         </ListContainer>
-    )
-}
+    );
+};
 
 export default List;

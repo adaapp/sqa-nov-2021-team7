@@ -1,11 +1,16 @@
 import List from "./List";
 
-const App = () => {
-    return (
-        <div>
-            <List listItems={['string1', 'string2']} />
-        </div>
-    )
+interface AppProps {
+    message?: string[]
 }
 
-export default App
+const App = (props: AppProps) => {
+    const message: string[] = props.message || ["Lorem ipsum"];
+    return (
+        <div>
+            <List listItems={message} />
+        </div>
+    );
+};
+
+export default App;
