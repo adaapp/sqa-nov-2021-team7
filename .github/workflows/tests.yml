@@ -37,6 +37,13 @@ jobs:
         working-directory: ./client
         run: npm ci
 
+      - name: API ESlint check
+        working-directory: ./api
+        run: npm run eslint
+
+      - name: Client ESlint check
+        working-directory: ./client
+        run: npm run eslint
 
       - name: Run API Tests
         working-directory: ./api
