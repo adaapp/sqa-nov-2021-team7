@@ -7,8 +7,10 @@ function App() {
 
     useEffect(() => {
         const getMessage = async () => {
-            const message = await getRootMessage();
-            setMessage(message);
+            const response = await getRootMessage();
+            const { data } = response;
+
+            setMessage(data);
         }
 
         getMessage();
