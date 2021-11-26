@@ -7,7 +7,7 @@
     "start": "ts-node src/server.ts",
     "start:dev": "nodemon",
     "eslint": "eslint 'src/**/*'",
-    "test": "jest"
+    "test": "jest --forceExit"
   },
   "author": "Hou Fai Man, Saeed Afzal, Samuel Crispin",
   "license": "ISC",

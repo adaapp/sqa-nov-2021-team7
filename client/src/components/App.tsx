@@ -1,16 +1,25 @@
-import List from "./List";
+import { useState, useEffect } from 'react';
+import '../styles/App.less'
+import { getRootMessage } from "../services/apiservice";
 
-interface AppProps {
-    message?: string[]
-}
+function App() {
+    const [message, setMessage] = useState("");
 
-const App = (props: AppProps) => {
-    const message: string[] = props.message || ["Lorem ipsum"];
+    const getMessage = async () => {
+        const message = await getRootMessage() as string;
+
+        setMessage(message);
+    }
+
+    useEffect(() => {
+        getMessage();
+    }, []);
+
     return (
         <div>
-            <List listItems={message} />
+            { message }
         </div>
-    );
-};
+    )
+}
 
 export default App;

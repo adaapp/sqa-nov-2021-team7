@@ -1,17 +1,24 @@
-import {render, waitFor} from "@testing-library/react";
-import "@testing-library/jest-dom";
 import App from "../src/components/App";
+import { render, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import { mocked } from "ts-jest/utils";
+import axios from "axios";
+import { OK } from "../src/services/apiservice";
+
+jest.mock("axios");
+const mockedAxios = mocked(axios, true);
 
 describe("App component", () => {
     it("renders correctly", async () => {
-        const messages = ["Test 1", "Test 2"];
+        // Given
+        mockedAxios.get.mockReturnValue({ data: "Hello world", status: OK, statusText: "OK" } as any);
 
-        const { getByText } = render(<App message={messages}/>);
+        // When
+        const { getByText } = render(<App/>);
 
+        // Then
         await waitFor(() => {
-            for (const message of messages) {
-                expect(getByText(message)).toBeInTheDocument();
-            }
+            expect(getByText("Hello world")).toBeInTheDocument();
         });
     });
 });
