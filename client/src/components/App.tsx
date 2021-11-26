@@ -1,7 +1,25 @@
-import "../styles/App.less";
+import { useState, useEffect } from 'react';
+import '../styles/App.less'
+import { getRootMessage } from "../services/apiservice";
 
-const App = () => {
-    return <div>Hello world</div>;
-};
+function App() {
+    const [message, setMessage] = useState("");
+
+    const getMessage = async () => {
+        const message = await getRootMessage() as string;
+
+        setMessage(message);
+    }
+
+    useEffect(() => {
+        getMessage();
+    }, []);
+
+    return (
+        <div>
+            { message }
+        </div>
+    )
+}
 
 export default App;
