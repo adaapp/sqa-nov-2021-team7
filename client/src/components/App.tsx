@@ -5,14 +5,13 @@ import { getRootMessage } from "../services/apiservice";
 function App() {
     const [message, setMessage] = useState("");
 
+    const getMessage = async () => {
+        const message = await getRootMessage() as string;
+
+        setMessage(message);
+    }
+
     useEffect(() => {
-        const getMessage = async () => {
-            const response = await getRootMessage();
-            const { data } = response;
-
-            setMessage(data);
-        }
-
         getMessage();
     }, []);
 
