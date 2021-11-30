@@ -1,4 +1,7 @@
 export default {
     preset: "ts-jest",
-    testEnvironment: "jsdom"
+    testEnvironment: "jsdom",
+    moduleNameMapper: {
+        "\\.(png)$": "<rootDir>/mocks/fileMocks.tsx"
+    }
 };

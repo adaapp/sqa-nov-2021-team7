@@ -1,8 +1,8 @@
 import axios from 'axios';
 import {ErrorResponse, SuccessResponse, TodoItem} from "../types/todo";
 
-export const OK: number = 200;
-export const BAD_REQUEST: number = 400;
+export const OK = 200;
+export const BAD_REQUEST = 400;
 
 export const BASE_URL = "http://localhost:8080";
 
@@ -12,12 +12,11 @@ export const getRootMessage = async (): Promise<string | ErrorResponse> => {
 
     if (status === OK) {
         return data;
-    } else {
-        return <ErrorResponse> {
-            error: statusText
-        }
     }
-}
+    return <ErrorResponse> {
+        error: statusText
+    };
+};
 
 export const getItem = async (id: string): Promise<TodoItem[] | ErrorResponse> => {
     const response = await axios.get(BASE_URL + `/item/${id}`);
@@ -25,12 +24,11 @@ export const getItem = async (id: string): Promise<TodoItem[] | ErrorResponse> =
 
     if (status === OK) {
         return data;
-    } else {
-        return <ErrorResponse> {
-            error: statusText
-        }
     }
-}
+    return <ErrorResponse> {
+        error: statusText
+    };
+};
 
 export const createItem = async (params: Record<string, string> ): Promise<SuccessResponse | ErrorResponse> => {
     const response = await axios.post(BASE_URL + `/item`, params);
@@ -39,13 +37,12 @@ export const createItem = async (params: Record<string, string> ): Promise<Succe
     if (status === OK) {
         return <SuccessResponse> {
             message: "Successfully created a todo item."
-        }
-    } else {
-        return <ErrorResponse> {
-            error: statusText
-        }
+        };
     }
-}
+    return <ErrorResponse> {
+        error: statusText
+    };
+};
 
 export const updateItem = async (id: string, params: Record<string, string> ): Promise<TodoItem[] | ErrorResponse> => {
     const response = await axios.put(BASE_URL + `/item/${id}`, params);
@@ -53,12 +50,11 @@ export const updateItem = async (id: string, params: Record<string, string> ): P
 
     if (status === OK) {
         return data;
-    } else {
-        return <ErrorResponse> {
-            error: statusText
-        }
     }
-}
+    return <ErrorResponse> {
+        error: statusText
+    };
+};
 
 export const deleteItem = async (id: string): Promise<SuccessResponse | ErrorResponse> => {
     const response = await axios.delete(BASE_URL + `/item/${id}`);
@@ -67,13 +63,12 @@ export const deleteItem = async (id: string): Promise<SuccessResponse | ErrorRes
     if (status === OK) {
         return <SuccessResponse> {
             message: "Successfully deleted an item."
-        }
-    } else {
-        return <ErrorResponse> {
-            error: statusText
-        }
+        };
     }
-}
+    return <ErrorResponse> {
+        error: statusText
+    };
+};
 
 export const getItems = async (): Promise<TodoItem[] | ErrorResponse> => {
     const response = await axios.get(BASE_URL + `/items`);
@@ -81,9 +76,8 @@ export const getItems = async (): Promise<TodoItem[] | ErrorResponse> => {
 
     if (status === OK) {
         return data;
-    } else {
-        return <ErrorResponse> {
-            error: statusText
-        }
     }
-}
+    return <ErrorResponse> {
+        error: statusText
+    };
+};
