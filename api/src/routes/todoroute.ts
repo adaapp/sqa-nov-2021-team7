@@ -1,5 +1,6 @@
 import express, {Request, Response} from "express";
 import {addTodo} from "../core/todorepository";
+import {STATUS} from "../core/httputil";
 
 const router = express.Router();
 
@@ -15,7 +16,7 @@ function createTodoItem(req: Request, res: Response) {
             status: true
         });
     } else {
-        res.status(400).json({
+        res.status(STATUS.BAD_REQUEST).json({
             status: false,
             message: "Failed to create todo item."
         });
