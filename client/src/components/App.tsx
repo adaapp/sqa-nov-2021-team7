@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import '../styles/App.less'
 import { getRootMessage } from "../services/apiservice";
 
 function App() {
@@ -9,7 +8,7 @@ function App() {
         const message = await getRootMessage() as string;
 
         setMessage(message);
-    }
+    };
 
     useEffect(() => {
         getMessage();
@@ -19,7 +18,7 @@ function App() {
         <div>
             { message }
         </div>
-    )
+    );
 }
 
 export default App;
