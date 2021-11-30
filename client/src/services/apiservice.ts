@@ -31,7 +31,7 @@ export const getItem = async (id: string): Promise<TodoItem[] | ErrorResponse> =
 };
 
 export const createItem = async (params: Record<string, string> ): Promise<SuccessResponse | ErrorResponse> => {
-    const response = await axios.post(BASE_URL + `/item`, params);
+    const response = await axios.post(BASE_URL + `/todo`, params);
     const { status, statusText } = response;
 
     if (status === OK) {

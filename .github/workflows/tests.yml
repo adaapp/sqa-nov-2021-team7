@@ -52,3 +52,7 @@ jobs:
       - name: Run Client Tests
         working-directory: ./client
         run: npm test
+
+      - name: Run Cypress Tests
+        working-directory: ./client
+        run: npm cypress:open

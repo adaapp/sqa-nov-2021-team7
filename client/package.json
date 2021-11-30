@@ -8,7 +8,8 @@
     "build": "tsc && vite build",
     "serve": "vite preview",
     "test": "jest",
-    "eslint": "eslint 'src/**/*'"
+    "eslint": "eslint 'src/**/*'",
+    "cypress:open": "cypress open"
   },
   "dependencies": {
     "axios": "^0.24.0",
@@ -26,6 +27,7 @@
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "@vitejs/plugin-react": "^1.1.0",
+    "cypress": "^9.1.0",
     "eslint": "^8.3.0",
     "eslint-plugin-react": "^7.27.1",
     "jest": "^27.3.1",
