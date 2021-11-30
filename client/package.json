@@ -1,12 +1,14 @@
 {
   "name": "todo-app-assignment-fe",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Frontend application for our todo app assignment",
+  "private": true,
   "scripts": {
     "start": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",
-    "test": "jest"
+    "test": "jest",
+    "eslint": "eslint 'src/**/*'"
   },
   "dependencies": {
     "axios": "^0.24.0",
