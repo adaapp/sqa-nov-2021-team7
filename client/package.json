@@ -10,7 +10,8 @@
     "test": "jest tests",
     "test:watch": "jest tests --watch",
     "eslint": "eslint 'src/**/*'",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "dependencies": {
     "axios": "^0.24.0",

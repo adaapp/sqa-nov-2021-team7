@@ -2,19 +2,14 @@ import * as cypress from "cypress";
 
 describe('to-do app', () => {
 
-    Cypress.on('uncaught:exception', (err, runnable) => {
-        return false;
-    });
-
-    Cypress.on('fail', (error, runnable) => {
-        return false;
-    });
-
     beforeEach(() => {
+        cy.exec('npm start');
         cy.visit('http://localhost:3000');
     });
 
     it('should successfully create a todo item', () => {
+        cy.intercept('POST', '/todo', { statusCode: 200, body: { status: true }});
+
         cy.get('[data-test-id=title-input]').type("Title");
         cy.get('[data-test-id=description-input]').type("Description");
         cy.get('[data-test-id=create-button]').click();
@@ -30,6 +25,6 @@ describe('to-do app', () => {
         cy.get('[data-test-id=create-button]').click();
 
         cy.get('[data-test-id=feedback]').should('be.visible');
-        cy.get('[data-test-id=feedback]').contains('Failed to create a todo item.');
+        cy.get('[data-test-id=feedback]').contains('Failed to create todo item.');
     });
-})
+});
