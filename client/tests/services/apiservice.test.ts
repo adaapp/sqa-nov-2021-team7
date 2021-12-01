@@ -93,10 +93,6 @@ describe("apiservice", () => {
                 dateCreated: new Date()
             };
             const expectedResult = "Failed to create todo item.";
-            /*mockedAxios.post.mock({ data: {
-                status: false,
-                message: expectedResult
-            }, status: BAD_REQUEST });*/
             mockedAxios.post.mockImplementation(() => {
                 throw {
                     response: {

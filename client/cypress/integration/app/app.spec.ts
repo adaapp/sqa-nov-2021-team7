@@ -3,7 +3,6 @@ import * as cypress from "cypress";
 describe('to-do app', () => {
 
     beforeEach(() => {
-        cy.exec('npm start');
         cy.visit('http://localhost:3000');
     });
 
