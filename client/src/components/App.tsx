@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { createItem, getRootMessage } from "../services/apiservice";
 import { CreateButton } from '../components/Button';
 import { Input }  from '../components/Input';
+import {ErrorResponse, SuccessResponse, TodoItem} from "../types/todo";
+
 import styled from "styled-components";
 
 const Feedback = styled.div`
@@ -14,11 +16,11 @@ function App() {
     const [description, setDescription] = useState<string>("");
 
     const createTodo = async () => {
-        const params: Record<String, String> = {
+        const params: TodoItem = {
             title: title,
             description: description,
-            dateCreated: new Date().getTime(),
-            dateDue: new Date().getTime()
+            dateCreated: new Date(),
+            dateDue: new Date()
         }
 
         const result = await createItem(params);
@@ -36,13 +38,13 @@ function App() {
                 dataTestId={"title-input"}
                 placeholder={"Title"}
                 value={title}
-                onInput={(event) => setTitle(event.target.value)}
+                onInput={(event) => setTitle((event.target as HTMLInputElement).value)}
             />
             <Input
                 dataTestId={"description-input"}
                 placeholder={"Description"}
                 value={description}
-                onInput={(event) => setDescription(event.target.value)}
+                onInput={(event) => setDescription((event.target as HTMLInputElement).value)}
             />
             <CreateButton
                 dataTestId={"create-button"}
