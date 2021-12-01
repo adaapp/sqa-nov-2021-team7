@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom";
-import Button from "../src/components/Button";
+import { DeleteButton } from "../src/components/Button";
 import * as TestRenderer from "react-test-renderer";
 import {ReactTestInstance, ReactTestRenderer} from "react-test-renderer";
 
@@ -9,9 +9,9 @@ describe("Button", () => {
             return null;
         };
 
-        const testRenderer: ReactTestRenderer = TestRenderer.create(<Button onClick={mockFn} />);
+        const testRenderer: ReactTestRenderer = TestRenderer.create(<DeleteButton onClick={mockFn}  dataTestId={""} value={""}/>);
         const testInstance: ReactTestInstance = testRenderer.root;
 
-        expect(testInstance.findByType(Button).props.onClick).toBe(mockFn);
+        expect(testInstance.findByType(DeleteButton).props.onClick).toBe(mockFn);
     });
 });

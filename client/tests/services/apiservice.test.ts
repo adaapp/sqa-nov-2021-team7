@@ -17,10 +17,11 @@ jest.mock("axios");
 const mockedAxios = mocked(axios, true);
 
 describe("apiservice", () => {
+
     describe("getRootMessage", () => {
         it("should successfully return a string message", async () => {
             // Given
-            const expectedResult: string = "Message";
+            const expectedResult = "Message";
             mockedAxios.get.mockResolvedValue({ data: expectedResult, status: OK, statusText: "OK" });
 
             // When
@@ -35,9 +36,9 @@ describe("apiservice", () => {
     describe("getItem", () => {
         it("should successfully return a list with a single object", async () => {
             // Given
-            const id: string = "0";
+            const id = "0";
             const expectedResult: TodoItem[] = [
-                {id: "0", description: "To-do item", modifiedAt: new Date(), dueDate: new Date()}
+                { title: "0", description: "To-do item", dateCreated: new Date(), dateDue: new Date()}
             ];
             mockedAxios.get.mockResolvedValue({data: expectedResult, status: OK, statusText: "OK"});
 
@@ -52,8 +53,8 @@ describe("apiservice", () => {
 
         it("should return an error response if item does not exist.", async () => {
             // Given
-            const id: string = "0";
-            const expectedResult: string = "Failed to retrieve item; item does not exist.";
+            const id = "0";
+            const expectedResult = "Failed to retrieve item; item does not exist.";
             mockedAxios.get.mockResolvedValue({ data: null, status: BAD_REQUEST, statusText: expectedResult});
 
             // When
@@ -68,33 +69,50 @@ describe("apiservice", () => {
     describe("createItem", () => {
         it("should successfully create a todo item", async () => {
             // Given
-            const data: Record<string, string> = {
-                description: "Description"
-            }
-            const expectedResult: string = "Successfully created a todo item.";
-            mockedAxios.post.mockResolvedValue({ data: null, status: OK, statusText: "OK" });
+            const data: TodoItem = {
+                title: "Title",
+                description: "Description",
+                dateCreated: new Date()
+            };
+            const expectedResult = "Successfully created a todo item.";
+            mockedAxios.post.mockResolvedValue({ data: { status: true }, status: OK });
 
             // When
             const result = await createItem(data) as SuccessResponse;
 
             // Then
-            expect(mockedAxios.post).toHaveBeenCalledWith(BASE_URL + `/item`, data);
+            expect(mockedAxios.post).toHaveBeenCalledWith(BASE_URL + `/todo`, data);
             expect(result.message).toBe(expectedResult);
         });
 
         it("should return an error message if item cannot be created.", async () => {
             // Given
-            const data: Record<string, string>  = {
-                description: "Description"
-            }
-            const expectedResult: string = "Failed to create an item.";
-            mockedAxios.post.mockResolvedValue({ data: null, status: BAD_REQUEST, statusText: expectedResult });
+            const data: TodoItem = {
+                title: "Title",
+                description: "Description",
+                dateCreated: new Date()
+            };
+            const expectedResult = "Failed to create todo item.";
+            /*mockedAxios.post.mock({ data: {
+                status: false,
+                message: expectedResult
+            }, status: BAD_REQUEST });*/
+            mockedAxios.post.mockImplementation(() => {
+                throw {
+                    response: {
+                        data: {
+                            status: false,
+                            message: expectedResult
+                        }
+                    }
+                };
+            });
 
             // When
             const result = await createItem(data) as ErrorResponse;
 
             // Then
-            expect(mockedAxios.post).toHaveBeenCalledWith(BASE_URL + `/item`, data);
+            expect(mockedAxios.post).toHaveBeenCalledWith(BASE_URL + `/todo`, data);
             expect(result.error).toBe(expectedResult);
         });
     });
@@ -102,12 +120,12 @@ describe("apiservice", () => {
     describe("updateItem", () => {
         it("should successfully update an existing todo item", async () => {
             // Given
-            const id: string = "0"
+            const id = "0";
             const data: Record<string, string>  = {
                 description: "Updated description"
-            }
+            };
             const expectedResult: TodoItem[] = [
-                { id: "0", description: "Updated description", modifiedAt: new Date(), dueDate: new Date() }
+                { title: "0", description: "Updated description", dateCreated: new Date(), dateDue: new Date() }
             ];
             mockedAxios.put.mockResolvedValue({ data: expectedResult, status: OK, statusText: "OK" });
 
@@ -122,11 +140,11 @@ describe("apiservice", () => {
 
         it("should return an error message if item cannot be updated.", async () => {
             // Given
-            const id: string = "0"
+            const id = "0";
             const data: Record<string, string>  = {
                 description: "Updated description"
-            }
-            const expectedResult: string = "Failed to update an item; item does not exist.";
+            };
+            const expectedResult = "Failed to update an item; item does not exist.";
             mockedAxios.put.mockResolvedValue({ data: null, status: BAD_REQUEST, statusText: expectedResult });
 
             // When
@@ -141,8 +159,8 @@ describe("apiservice", () => {
     describe("deleteItem", () => {
         it("should successfully delete a todo item", async () => {
             // Given
-            const id: string = "0";
-            const expectedResult: string = "Successfully deleted an item.";
+            const id = "0";
+            const expectedResult = "Successfully deleted an item.";
             mockedAxios.delete.mockResolvedValue({ status: OK, statusText: "OK" });
 
             // When
@@ -155,8 +173,8 @@ describe("apiservice", () => {
 
         it("should return an error if item cannot be deleted", async () => {
             // Given
-            const id: string = "0";
-            const expectedResult: string = "Failed to delete an item; item does not exist.";
+            const id = "0";
+            const expectedResult = "Failed to delete an item; item does not exist.";
             mockedAxios.delete.mockResolvedValue({ data: null, status: BAD_REQUEST, statusText: expectedResult });
 
             // When
@@ -172,10 +190,10 @@ describe("apiservice", () => {
         it("should successfully retrieve a list of todo items", async () => {
             // Given
             const expectedResult: TodoItem[] = [
-                { id: "0", description: "Description 0", modifiedAt: new Date(), dueDate: new Date() },
-                { id: "1", description: "Description 1", modifiedAt: new Date(), dueDate: new Date() },
-                { id: "2", description: "Description 2", modifiedAt: new Date(), dueDate: new Date() }
-            ]
+                { title: "0", description: "Description 0", dateCreated: new Date(), dateDue: new Date() },
+                { title: "1", description: "Description 1", dateCreated: new Date(), dateDue: new Date() },
+                { title: "2", description: "Description 2", dateCreated: new Date(), dateDue: new Date() }
+            ];
             mockedAxios.get.mockResolvedValue({ data: expectedResult, status: OK, statusText: "OK" });
 
             // When
@@ -202,7 +220,7 @@ describe("apiservice", () => {
 
         it("should return an error if unable to retrieve items", async () => {
             // Given
-            const expectedResult: string = "Failed to retrieve a list of items."
+            const expectedResult = "Failed to retrieve a list of items.";
             mockedAxios.get.mockResolvedValue({ data: null, status: BAD_REQUEST, statusText: expectedResult });
 
             // When

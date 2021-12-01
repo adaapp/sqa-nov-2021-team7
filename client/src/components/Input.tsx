@@ -1,11 +1,11 @@
-import {KeyboardEventHandler} from "react";
+import { FormEventHandler, KeyboardEventHandler } from "react";
 import styled from "styled-components";
 
 interface InputProps {
     dataTestId: string
     placeholder: string
     value: string
-    onInput: KeyboardEventHandler
+    onInput: FormEventHandler<HTMLInputElement>
 }
 
 const InputField = styled.input`

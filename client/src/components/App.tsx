@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import { createItem, getRootMessage } from "../services/apiservice";
-import { CreateButton } from '../components/Button';
-import { Input }  from '../components/Input';
-import {ErrorResponse, SuccessResponse, TodoItem} from "../types/todo";
+import { useState} from 'react';
+import { createItem} from "../services/apiservice";
+import { CreateButton } from './Button';
+import { Input }  from './Input';
+import { TodoItem } from "../types/todo";
 
 import styled from "styled-components";
 
@@ -21,7 +21,7 @@ function App() {
             description: description,
             dateCreated: new Date(),
             dateDue: new Date()
-        }
+        };
 
         const result = await createItem(params);
 
@@ -30,7 +30,7 @@ function App() {
         } else {
             setFeedback(result.error);
         }
-    }
+    };
 
     return (
         <div>
@@ -38,18 +38,24 @@ function App() {
                 dataTestId={"title-input"}
                 placeholder={"Title"}
                 value={title}
-                onInput={(event) => setTitle((event.target as HTMLInputElement).value)}
+                onInput={(event) => {
+                    const target = event.target as HTMLInputElement;
+                    setTitle(target.value);
+                }}
             />
             <Input
                 dataTestId={"description-input"}
                 placeholder={"Description"}
                 value={description}
-                onInput={(event) => setDescription((event.target as HTMLInputElement).value)}
+                onInput={(event) => {
+                    const target = event.target as HTMLInputElement;
+                    setDescription(target.value);
+                }}
             />
             <CreateButton
                 dataTestId={"create-button"}
                 value={"Create"}
-                onClick={(event) => createTodo()}
+                onClick={() => createTodo()}
             />
             <Feedback
                 data-test-id={"feedback"}

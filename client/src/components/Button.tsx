@@ -5,7 +5,7 @@ import imgUrl from '../../binIcon.png';
 interface ButtonProps {
     dataTestId: string
     onClick: MouseEventHandler
-    value: string
+    value?: string
 }
 
 const DeleteIcon = styled.div`
@@ -30,8 +30,8 @@ export const CreateButton = (props: ButtonProps) => {
         >
             {props.value}
         </Button>
-    )
-}
+    );
+};
 
 export const DeleteButton = (props: ButtonProps) => {
     return (
