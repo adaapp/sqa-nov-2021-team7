@@ -5,7 +5,7 @@ const EMPTY_LENGTH = 0;
 /**
  * A utility function to check if a string it empty or blank.
  * @param val The string to check.
- * @return If the string is empty or not.
+ * @return Boolean if the string is empty or not.
  */
 const empty = (val: string): boolean => {
     return !val || val.length === EMPTY_LENGTH;
@@ -23,4 +23,8 @@ export function addTodo(item: TodoItem) {
 
 export function getTodoItems(): TodoItem[] {
     return todoCache;
+}
+
+export function clearTodoItems(): void {
+    todoCache.length = 0;
 }
