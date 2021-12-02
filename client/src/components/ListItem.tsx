@@ -28,11 +28,23 @@ const ListItem = (props: ListItemProps) => {
         <ListItemStyled data-test-id={dataTestId}>
             <Text>{listItem.title}</Text>
             <Text>{listItem.description}</Text>
-            <Text>{listItem.dateCreated}</Text>
-            <Text>{listItem.dateDue}</Text>
+            <Text>{formatTime(listItem.dateCreated)}</Text>
+            <Text>{listItem.dateDue ? formatTime(listItem.dateDue) : ""}</Text>
             <DeleteButton onClick={() => console.log('Remove item api call here')} dataTestId={"delete-button"}/>
         </ListItemStyled>
     );
 };
+
+const formatTime = (time: number): string => {
+    const date = new Date(time);
+
+    return date.toLocaleString("en-GB", {
+        day: "numeric",
+        month: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric"
+    });
+}
 
 export default ListItem;

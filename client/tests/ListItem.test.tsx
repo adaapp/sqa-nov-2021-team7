@@ -16,7 +16,7 @@ describe("List", () => {
 
         expect(getByText(data.title)).toBeInTheDocument();
         expect(getByText(data.description!)).toBeInTheDocument();
-        expect(getByText(data.dateCreated)).toBeInTheDocument();
-        expect(getByText(data.dateDue!)).toBeInTheDocument();
+        expect(getByText("02/12/2021, 21:44")).toBeInTheDocument();
+        expect(getByText("02/12/2021, 21:45")).toBeInTheDocument();
     });
 });
