@@ -1,17 +1,21 @@
 import request from "supertest";
 import server from "../../src/server";
-import { getTodoItems } from "../../src/core/todorepository";
+import { addTodo, clearTodoItems, getTodoItems } from "../../src/core/todorepository";
 
 describe("Todo route", () => {
 
     const testTodoItem = {
         title: "Title",
         description: "description",
-        dateCreated: new Date().getTime(),
-        dateDue: new Date().getTime()
+        dateCreated: new Date(),
+        dateDue: new Date()
     };
 
-    describe("POST /", () => {
+    beforeEach(() => {
+        clearTodoItems();
+    });
+
+    describe("POST /todo", () => {
         it("can add new items to the cache", async () => {
             const res = await request(server)
                 .post("/todo")
@@ -24,7 +28,7 @@ describe("Todo route", () => {
         });
 
         it("fails to add item if request is invalid", async () => {
-            const item = testTodoItem;
+            const item = { ...testTodoItem };
             item.title = "";
 
             const res = await request(server)
@@ -34,6 +38,29 @@ describe("Todo route", () => {
 
             expect(res.statusCode).toBe(400);
             expect(res.body).toHaveProperty("status", false);
+        });
+    });
+
+    describe("GET /todo", () => {
+        it("should return empty array if no todo items created", async () => {
+            const res = await request(server)
+                .get("/todo")
+                .send();
+
+            expect(res.statusCode).toBe(200);
+            expect(res.body).toHaveLength(0);
+        });
+
+        it("should retrieve todo items", async () => {
+            addTodo(testTodoItem);
+            addTodo(testTodoItem);
+
+            const res = await request(server)
+                .get("/todo")
+                .send();
+
+            expect(res.statusCode).toBe(200);
+            expect(res.body).toHaveLength(2);
         });
     });
 });
