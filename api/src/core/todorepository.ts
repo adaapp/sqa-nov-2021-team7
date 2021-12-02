@@ -1,3 +1,4 @@
+import { v4 as uuid } from "uuid";
 import { TodoItem } from "./types/todo";
 
 const EMPTY_LENGTH = 0;
@@ -11,20 +12,32 @@ const empty = (val: string): boolean => {
     return !val || val.length === EMPTY_LENGTH;
 };
 
-const todoCache: TodoItem[] = [];
+const todoCache: Record<string, TodoItem> = {};
 
-export function addTodo(item: TodoItem) {
-    const canAddToCache = !empty(item.title);
-    if (canAddToCache) {
-        todoCache.push(item);
+export function addTodo(item: TodoItem): TodoItem | null {
+    if (!empty(item.title) || !item.dateCreated) {
+        item.id = uuid();
+        todoCache[item.id] = item;
+        return item;
     }
-    return canAddToCache;
+    return null;
 }
 
 export function getTodoItems(): TodoItem[] {
-    return todoCache;
+    return Object.values(todoCache);
 }
 
 export function clearTodoItems(): void {
-    todoCache.length = 0;
+    for (const key of Object.getOwnPropertyNames(todoCache)) {
+        delete todoCache[key];
+    }
+}
+
+export function removeSingleItem(id: string): boolean {
+    const exists = id in todoCache;
+    if (exists) {
+        delete todoCache[id];
+        return exists;
+    }
+    return false;
 }

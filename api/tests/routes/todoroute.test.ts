@@ -5,10 +5,11 @@ import { addTodo, clearTodoItems, getTodoItems } from "../../src/core/todoreposi
 describe("Todo route", () => {
 
     const testTodoItem = {
+        id: "id",
         title: "Title",
         description: "description",
-        dateCreated: new Date(),
-        dateDue: new Date()
+        dateCreated: new Date().getTime(),
+        dateDue: new Date().getTime()
     };
 
     beforeEach(() => {
@@ -23,7 +24,8 @@ describe("Todo route", () => {
                 .send(testTodoItem);
 
             expect(res.statusCode).toBe(200);
-            expect(res.body).toStrictEqual({ status: true });
+            expect(res.body).toHaveProperty("status", true);
+            expect(res.body).toHaveProperty("todo");
             expect(getTodoItems()).toHaveLength(1);
         });
 
@@ -61,6 +63,65 @@ describe("Todo route", () => {
 
             expect(res.statusCode).toBe(200);
             expect(res.body).toHaveLength(2);
+        });
+    });
+
+    describe("DELETE /todo/:id", () => {
+        it("deletes an existing todo item", async () => {
+            const todo = addTodo(testTodoItem)!;
+            expect(getTodoItems()).toHaveLength(1);
+
+            const res = await request(server)
+                .delete(`/todo/${todo.id}`)
+                .send();
+
+            expect(res.statusCode).toBe(200);
+            expect(getTodoItems()).toHaveLength(0);
+            expect(res.body).toStrictEqual({
+                status: true,
+                id: todo.id
+            });
+        });
+
+        it("fails to delete if item with id does not exist", async () => {
+            expect(getTodoItems()).toHaveLength(0);
+
+            const res = await request(server)
+                .delete("/todo/id-does-not-exist")
+                .send();
+
+            expect(res.statusCode).toBe(400);
+            expect(res.body).toHaveProperty("status", false);
+        });
+
+        it("fails to delete if item with id does not exist and todo items already exist", async () => {
+            const todo = addTodo(testTodoItem)!;
+            addTodo(testTodoItem);
+            expect(getTodoItems()).toHaveLength(2);
+
+            const res = await request(server)
+                .delete(`/todo/${todo.id}`)
+                .send();
+
+            expect(res.statusCode).toBe(200);
+            expect(getTodoItems()).toHaveLength(1);
+        });
+    });
+
+    describe("DELETE /", () => {
+        it("should remove all todo items", async () => {
+            addTodo(testTodoItem);
+            addTodo(testTodoItem);
+            addTodo(testTodoItem);
+            expect(getTodoItems()).toHaveLength(3);
+
+            const res = await request(server)
+                .delete("/todo")
+                .send();
+
+            expect(res.statusCode).toBe(200);
+            expect(getTodoItems()).toHaveLength(0);
+            expect(res.body).toHaveProperty("status", true);
         });
     });
 });
