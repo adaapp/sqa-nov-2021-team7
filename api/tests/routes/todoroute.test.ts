@@ -7,8 +7,8 @@ describe("Todo route", () => {
     const testTodoItem = {
         title: "Title",
         description: "description",
-        dateCreated: new Date(),
-        dateDue: new Date()
+        dateCreated: new Date().getTime(),
+        dateDue: new Date().getTime()
     };
 
     beforeEach(() => {

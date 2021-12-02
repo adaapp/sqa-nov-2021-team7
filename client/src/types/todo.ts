@@ -1,14 +1,16 @@
 export interface TodoItem {
     title: string,
     description?: string,
-    dateCreated: Date,
-    dateDue?: Date
+    dateCreated: number,
+    dateDue?: number
 }
 
 export interface SuccessResponse {
-    message: string
+    data?: unknown,
+    message?: string
 }
 
 export interface ErrorResponse {
-    error: string
+    data?: unknown,
+    error?: string
 }

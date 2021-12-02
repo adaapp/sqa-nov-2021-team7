@@ -2,6 +2,7 @@ import {
     BASE_URL,
     OK,
     BAD_REQUEST,
+    INTERNAL_SERVER_ERROR,
     createItem,
     deleteItem,
     getItem,
@@ -38,7 +39,7 @@ describe("apiservice", () => {
             // Given
             const id = "0";
             const expectedResult: TodoItem[] = [
-                { title: "0", description: "To-do item", dateCreated: new Date(), dateDue: new Date()}
+                { title: "0", description: "To-do item", dateCreated: new Date().getTime(), dateDue: new Date().getTime()}
             ];
             mockedAxios.get.mockResolvedValue({data: expectedResult, status: OK, statusText: "OK"});
 
@@ -72,7 +73,7 @@ describe("apiservice", () => {
             const data: TodoItem = {
                 title: "Title",
                 description: "Description",
-                dateCreated: new Date()
+                dateCreated: new Date().getTime()
             };
             const expectedResult = "Successfully created a todo item.";
             mockedAxios.post.mockResolvedValue({ data: { status: true }, status: OK });
@@ -90,7 +91,7 @@ describe("apiservice", () => {
             const data: TodoItem = {
                 title: "Title",
                 description: "Description",
-                dateCreated: new Date()
+                dateCreated: new Date().getTime()
             };
             const expectedResult = "Failed to create todo item.";
             mockedAxios.post.mockImplementation(() => {
@@ -121,7 +122,7 @@ describe("apiservice", () => {
                 description: "Updated description"
             };
             const expectedResult: TodoItem[] = [
-                { title: "0", description: "Updated description", dateCreated: new Date(), dateDue: new Date() }
+                { title: "0", description: "Updated description", dateCreated: new Date().getTime(), dateDue: new Date().getTime() }
             ];
             mockedAxios.put.mockResolvedValue({ data: expectedResult, status: OK, statusText: "OK" });
 
@@ -186,19 +187,20 @@ describe("apiservice", () => {
         it("should successfully retrieve a list of todo items", async () => {
             // Given
             const expectedResult: TodoItem[] = [
-                { title: "0", description: "Description 0", dateCreated: new Date(), dateDue: new Date() },
-                { title: "1", description: "Description 1", dateCreated: new Date(), dateDue: new Date() },
-                { title: "2", description: "Description 2", dateCreated: new Date(), dateDue: new Date() }
+                { title: "0", description: "Description 0", dateCreated: new Date().getTime(), dateDue: new Date().getTime() },
+                { title: "1", description: "Description 1", dateCreated: new Date().getTime(), dateDue: new Date().getTime() },
+                { title: "2", description: "Description 2", dateCreated: new Date().getTime(), dateDue: new Date().getTime() }
             ];
             mockedAxios.get.mockResolvedValue({ data: expectedResult, status: OK, statusText: "OK" });
 
             // When
-            const result = await getItems() as TodoItem[];
+            const result = await getItems() as SuccessResponse;
 
             // Then
-            expect(mockedAxios.get).toHaveBeenCalledWith(BASE_URL + `/items`);
-            expect(result.length).toBe(3);
-            expect(result).toEqual(expectedResult);
+            expect(mockedAxios.get).toHaveBeenCalledWith(BASE_URL + `/todo`);
+            expect(Array.isArray(result.data)).toBeTruthy();
+            expect((result.data as TodoItem[]).length).toBe(3);
+            expect(result.data).toEqual(expectedResult);
         });
 
         it("should return an empty array of todo items if call was successful.", async () => {
@@ -207,23 +209,23 @@ describe("apiservice", () => {
             mockedAxios.get.mockResolvedValue({ data: expectedResult, status: OK, statusText: "OK" });
 
             // When
-            const result = await getItems() as TodoItem[];
+            const result = await getItems() as SuccessResponse;
 
             // Then
-            expect(mockedAxios.get).toHaveBeenCalledWith(BASE_URL + `/items`);
-            expect(result).toBe(expectedResult);
+            expect(mockedAxios.get).toHaveBeenCalledWith(BASE_URL + `/todo`);
+            expect(result.data).toBe(expectedResult);
         });
 
-        it("should return an error if unable to retrieve items", async () => {
+        it("should return an error if server is down or unavailable", async () => {
             // Given
-            const expectedResult = "Failed to retrieve a list of items.";
-            mockedAxios.get.mockResolvedValue({ data: null, status: BAD_REQUEST, statusText: expectedResult });
+            const expectedResult = "Internal server error.";
+            mockedAxios.get.mockResolvedValue({ status: INTERNAL_SERVER_ERROR, statusText: expectedResult });
 
             // When
             const result = await getItems() as ErrorResponse;
 
             // Then
-            expect(mockedAxios.get).toHaveBeenCalledWith(BASE_URL + `/items`);
+            expect(mockedAxios.get).toHaveBeenCalledWith(BASE_URL + `/todo`);
             expect(result.error).toBe(expectedResult);
         });
     });
