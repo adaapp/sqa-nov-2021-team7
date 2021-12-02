@@ -1,6 +1,6 @@
 import request from "supertest";
 import server from "../../src/server";
-import { addTodo, getTodoItems } from "../../src/core/todorepository";
+import { addTodo, clearTodoItems, getTodoItems } from "../../src/core/todorepository";
 
 describe("Todo route", () => {
 
@@ -10,6 +10,10 @@ describe("Todo route", () => {
         dateCreated: new Date(),
         dateDue: new Date()
     };
+
+    beforeEach(() => {
+        clearTodoItems();
+    });
 
     describe("POST /todo", () => {
         it("can add new items to the cache", async () => {
@@ -24,7 +28,7 @@ describe("Todo route", () => {
         });
 
         it("fails to add item if request is invalid", async () => {
-            const item = testTodoItem;
+            const item = { ...testTodoItem };
             item.title = "";
 
             const res = await request(server)
@@ -47,7 +51,7 @@ describe("Todo route", () => {
             expect(res.body).toHaveLength(0);
         });
 
-        it("should todo items", async () => {
+        it("should retrieve todo items", async () => {
             addTodo(testTodoItem);
             addTodo(testTodoItem);
 

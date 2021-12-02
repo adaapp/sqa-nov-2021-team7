@@ -24,3 +24,7 @@ export function addTodo(item: TodoItem) {
 export function getTodoItems(): TodoItem[] {
     return todoCache;
 }
+
+export function clearTodoItems(): void {
+    todoCache.length = 0;
+}

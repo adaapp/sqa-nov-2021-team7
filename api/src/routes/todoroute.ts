@@ -9,7 +9,6 @@ router.get("/", getAllTodoItems);
 
 function createTodoItem(req: Request, res: Response) {
     const request = req.body;
-    console.debug(request);
 
     const result = addTodo(request);
     if (result) {
