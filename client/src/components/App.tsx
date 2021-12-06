@@ -19,7 +19,7 @@ function App() {
 
     useEffect(() => {
         getAllTodos();
-    }, [])
+    }, []);
 
     const createTodo = async () => {
         const params: TodoItem = {
@@ -39,18 +39,19 @@ function App() {
         if ("data" in result) {
             setTodos(result.data as TodoItem[]);
         }
-    }
+    };
 
     const updateFeedback = (result: SuccessResponse | ErrorResponse) => {
-        let successResponse = result as SuccessResponse;
-        let errorResponse = result as ErrorResponse;
+        const successResponse = result as SuccessResponse;
+        const errorResponse = result as ErrorResponse;
 
         if (successResponse.message) {
             setFeedback(successResponse.message);
         } else if (errorResponse.error) {
             setFeedback(errorResponse.error);
         }
-    }
+    };
+
     return (
         <div>
             <Input

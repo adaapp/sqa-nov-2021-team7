@@ -45,6 +45,6 @@ const formatTime = (time: number): string => {
         hour: "numeric",
         minute: "numeric"
     });
-}
+};
 
 export default ListItem;
