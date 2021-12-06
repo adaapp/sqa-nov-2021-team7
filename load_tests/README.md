@@ -12,7 +12,7 @@ From the root directory:
   * On some linux distributions, you may need to download venv, for example: `sudo apt install python3.8-venv`
 * Activate the virtual environment:
   * On unix systems such as MacOS and Linux: `source venv/bin/activate`
-  * On Windows: `call venv/scripts/activate.bat`
+  * On Windows (using Command Prompt): `call venv/scripts/activate.bat`
 * Install the locust package: `pip3 install locust`
 
 To start the web interface, after you have
