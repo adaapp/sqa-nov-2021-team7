@@ -1,4 +1,4 @@
-import { FormEventHandler, KeyboardEventHandler } from "react";
+import { FormEventHandler } from "react";
 import styled from "styled-components";
 
 interface InputProps {
