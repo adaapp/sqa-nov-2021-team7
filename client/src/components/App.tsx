@@ -57,12 +57,12 @@ function App() {
         } else if (errorResponse.error) {
             setFeedback(errorResponse.error);
         }
-    }
+    };
 
     const sortArray = (array: TodoItem[]) => {
         return array.sort((itemOne, itemTwo) => {
             return isAscending ? itemOne.dateCreated - itemTwo.dateCreated : itemTwo.dateCreated - itemOne.dateCreated;
-        })
+        });
     };
 
     return (
