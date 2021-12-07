@@ -1,6 +1,67 @@
 import * as cypress from "cypress";
 
+const ONE_MINUTE_IN_MILLISECONDS = 60000;
+
 describe('to-do app', () => {
+    describe("sorting ", () => {
+        beforeEach(() => {
+            cy.intercept('GET', '/todo', {
+                statusCode: 200,
+                body: [
+                    { title: "Title 1", description: "Description 1", dateCreated: new Date().getTime(), dateDue: new Date().getTime() },
+                    { title: "Title 2", description: "Description 2", dateCreated: new Date().getTime() + (5 * ONE_MINUTE_IN_MILLISECONDS), dateDue: new Date().getTime() + (5 * ONE_MINUTE_IN_MILLISECONDS) },
+                    { title: "Title 3", description: "Description 3", dateCreated: new Date().getTime() + (10 * ONE_MINUTE_IN_MILLISECONDS), dateDue: new Date().getTime() + (10 * ONE_MINUTE_IN_MILLISECONDS) }
+                ]
+            }).as("getItems");
+
+            cy.visit('http://localhost:3000');
+
+            cy.wait('@getItems');
+        })
+
+        it('should sort by ascending order by default', () => {
+            cy.get('[data-test-id=sort-button-descending]').should('be.visible');
+            cy.get('[data-test-id=sort-button-descending]').contains('Sort by Descending');
+
+            cy.get('[data-test-id=todo-item-0]').contains('Title 1');
+            cy.get('[data-test-id=todo-item-1]').contains('Title 2');
+            cy.get('[data-test-id=todo-item-2]').contains('Title 3');
+        });
+
+        it('should sort by descending order when the button is clicked when in ascending order', () => {
+            cy.get('[data-test-id=sort-button-descending]').should('be.visible');
+            cy.get('[data-test-id=sort-button-descending]').contains('Sort by Descending');
+            cy.get('[data-test-id=sort-button-descending]').click();
+
+            cy.get('[data-test-id=todo-item-0]').contains('Title 3');
+            cy.get('[data-test-id=todo-item-1]').contains('Title 2');
+            cy.get('[data-test-id=todo-item-2]').contains('Title 1');
+
+            cy.get('[data-test-id=sort-button-ascending]').should('be.visible');
+            cy.get('[data-test-id=sort-button-ascending]').contains('Sort by Ascending');
+        });
+
+        it('should sort by ascending order when the button is clicked when in descending order', () => {
+            cy.get('[data-test-id=sort-button-descending]').should('be.visible');
+            cy.get('[data-test-id=sort-button-descending]').contains('Sort by Descending');
+            cy.get('[data-test-id=sort-button-descending]').click();
+
+            cy.get('[data-test-id=todo-item-0]').contains('Title 3');
+            cy.get('[data-test-id=todo-item-1]').contains('Title 2');
+            cy.get('[data-test-id=todo-item-2]').contains('Title 1');
+
+            cy.get('[data-test-id=sort-button-ascending]').should('be.visible');
+            cy.get('[data-test-id=sort-button-ascending]').contains('Sort by Ascending');
+            cy.get('[data-test-id=sort-button-ascending]').click();
+
+            cy.get('[data-test-id=todo-item-0]').contains('Title 1');
+            cy.get('[data-test-id=todo-item-1]').contains('Title 2');
+            cy.get('[data-test-id=todo-item-2]').contains('Title 3');
+
+
+        });
+    });
+
     describe("create items", () => {
         beforeEach(() => {
             cy.visit('http://localhost:3000');
