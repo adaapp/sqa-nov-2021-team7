@@ -1,9 +1,10 @@
 import styled from 'styled-components';
-
 import ListItem from "./ListItem";
+import { TodoItem } from "../types/todo";
 
 interface ListProps {
-    listItems: string[]
+    dataTestId: string,
+    data: TodoItem[]
 }
 
 const ListContainer = styled.div`
@@ -11,10 +12,12 @@ const ListContainer = styled.div`
 `;
 
 const List = (props: ListProps) => {
+    const { dataTestId, data } = props;
+
     return (
-        <ListContainer>
-            {props.listItems.map((item, index) => {
-                return <ListItem message={props.listItems[index]} key={index}/>;
+        <ListContainer data-test-id={dataTestId}>
+            {data.map((item, index) => {
+                return <ListItem dataTestId={`todo-item-${index}`} listItem={data[index]} key={index}/>;
             })}
         </ListContainer>
     );

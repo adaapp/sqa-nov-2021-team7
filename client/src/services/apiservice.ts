@@ -3,6 +3,7 @@ import {ErrorResponse, SuccessResponse, TodoItem} from "../types/todo";
 
 export const OK = 200;
 export const BAD_REQUEST = 400;
+export const INTERNAL_SERVER_ERROR = 500;
 
 export const BASE_URL = "http://localhost:8080";
 
@@ -83,14 +84,29 @@ export const deleteItem = async (id: string): Promise<SuccessResponse | ErrorRes
     };
 };
 
-export const getItems = async (): Promise<TodoItem[] | ErrorResponse> => {
-    const response = await axios.get(BASE_URL + `/items`);
-    const { data, status, statusText } = response;
+export const getItems = async (): Promise<SuccessResponse | ErrorResponse> => {
+    try {
+        const response = await axios.get(BASE_URL + `/todo`);
+        const { data } = response;
 
-    if (status === OK) {
-        return data;
+        if (data) {
+            return <SuccessResponse> {
+                data: data
+            };
+        }
+    } catch (exception) {
+        const { response } = exception as { response: { data: { message: string }}};
+
+        if (response) {
+            const { message } = response.data;
+
+            return <ErrorResponse> {
+                error: message
+            };
+        }
     }
+
     return <ErrorResponse> {
-        error: statusText
+        error: "Internal server error."
     };
 };

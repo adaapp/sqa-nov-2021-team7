@@ -1,13 +1,22 @@
 import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import ListItem from "../src/components/ListItem";
+import {TodoItem} from "../src/types/todo";
 
 describe("List", () => {
     it("renders correctly", () => {
-        const message1 = 'message 1';
+        const data: TodoItem = {
+            title: "Title",
+            description: "Description",
+            dateCreated: 1638481494503,
+            dateDue: 1638481506034
+        }
 
-        const { getByText } = render(<ListItem message={message1}/>);
+        const { getByText } = render(<ListItem dataTestId={"todo-item-1"} listItem={data}/>);
 
-        expect(getByText(message1)).toBeInTheDocument();
+        expect(getByText(data.title)).toBeInTheDocument();
+        expect(getByText(data.description!)).toBeInTheDocument();
+        expect(getByText("02/12/2021, 21:44")).toBeInTheDocument();
+        expect(getByText("02/12/2021, 21:45")).toBeInTheDocument();
     });
 });

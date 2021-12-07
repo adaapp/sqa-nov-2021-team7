@@ -17,19 +17,19 @@ const DeleteIcon = styled.div`
     background-size: 20px;
 `;
 
-const Button = styled.button`
+const ButtonContainer = styled.button`
   margin: 5px;
   width: 200px;
 `;
 
-export const CreateButton = (props: ButtonProps) => {
+export const Button = (props: ButtonProps) => {
     return (
-        <Button
+        <ButtonContainer
             data-test-id={props.dataTestId}
             onClick={props.onClick}
         >
             {props.value}
-        </Button>
+        </ButtonContainer>
     );
 };
 

@@ -1,10 +1,11 @@
-import { useState} from 'react';
-import { createItem} from "../services/apiservice";
-import { CreateButton } from './Button';
+import {useEffect, useState} from 'react';
+import { createItem, getItems} from "../services/apiservice";
+import { Button } from './Button';
 import { Input }  from './Input';
-import { TodoItem } from "../types/todo";
+import {ErrorResponse, SuccessResponse, TodoItem} from "../types/todo";
 
 import styled from "styled-components";
+import List from "./List";
 
 const Feedback = styled.div`
 
@@ -14,21 +15,40 @@ function App() {
     const [feedback, setFeedback] = useState<string>("");
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
+    const [todos, setTodos] = useState<TodoItem[]>([]);
+
+    useEffect(() => {
+        getAllTodos();
+    }, []);
 
     const createTodo = async () => {
         const params: TodoItem = {
             title: title,
             description: description,
-            dateCreated: new Date(),
-            dateDue: new Date()
+            dateCreated: new Date().getTime(),
+            dateDue: new Date().getTime()
         };
 
         const result = await createItem(params);
+        updateFeedback(result);
+    };
 
-        if ("message" in result) {
-            setFeedback(result.message);
-        } else {
-            setFeedback(result.error);
+    const getAllTodos = async () => {
+        const result = await getItems();
+
+        if ("data" in result) {
+            setTodos(result.data as TodoItem[]);
+        }
+    };
+
+    const updateFeedback = (result: SuccessResponse | ErrorResponse) => {
+        const successResponse = result as SuccessResponse;
+        const errorResponse = result as ErrorResponse;
+
+        if (successResponse.message) {
+            setFeedback(successResponse.message);
+        } else if (errorResponse.error) {
+            setFeedback(errorResponse.error);
         }
     };
 
@@ -52,16 +72,22 @@ function App() {
                     setDescription(target.value);
                 }}
             />
-            <CreateButton
+            <Button
                 dataTestId={"create-button"}
                 value={"Create"}
                 onClick={() => createTodo()}
+            />
+            <Button
+                dataTestId={"refresh-button"}
+                value={"Refresh"}
+                onClick={() => getAllTodos()}
             />
             <Feedback
                 data-test-id={"feedback"}
             >
                 { feedback }
             </Feedback>
+            <List dataTestId={"todo-item-list-container"} data={todos}/>
         </div>
     );
 }
