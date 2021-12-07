@@ -34,10 +34,11 @@ export const getItem = async (id: string): Promise<TodoItem[] | ErrorResponse> =
 export const createItem = async (params: TodoItem): Promise<SuccessResponse | ErrorResponse> => {
     try {
         const response = await axios.post(BASE_URL + `/todo`, params);
-        const { status } = response.data;
+        const { todo, status } = response.data;
 
         if (status) {
             return <SuccessResponse> {
+                data: todo,
                 message: "Successfully created a todo item."
             };
         }
