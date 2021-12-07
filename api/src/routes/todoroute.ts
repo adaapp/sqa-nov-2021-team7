@@ -1,12 +1,20 @@
 import express, { Request, Response } from "express";
-import { addTodo, clearTodoItems, getTodoItems, removeSingleItem } from "../core/todorepository";
-import { STATUS } from "../core/httputil";
+import { ERROR_RESPONSE, STATUS } from "../core/httputil";
+import {
+    addTodo,
+    clearTodoItems,
+    getTodoItems,
+    removeSingleItem,
+    todoItemExists,
+    updateSingleTodoItem
+} from "../core/todorepository";
 
 const router = express.Router();
 
 router.post("/", createTodoItem);
 router.get("/", getAllTodoItems);
 router.delete("/:id?", removeSingleTodoItem);
+router.post("/:id", updateTodoItem);
 
 function createTodoItem(req: Request, res: Response) {
     const request = req.body;
@@ -43,11 +51,22 @@ function removeSingleTodoItem(req: Request, res: Response) {
                 id: id
             });
         } else {
-            res.status(STATUS.BAD_REQUEST).json({
-                status: false,
-                message: `Item with id ${id} does not exist.`
-            });
+            ERROR_RESPONSE(res, `Item with id ${id} does not exist.`);
         }
+    }
+}
+
+function updateTodoItem(req: Request, res: Response) {
+    const id: string = req.params.id;
+    const request = req.body;
+
+    if (todoItemExists(id)) {
+        updateSingleTodoItem(id, request);
+        res.json({
+            status: true
+        });
+    } else {
+        ERROR_RESPONSE(res, `Item with id ${id} does not exist.`);
     }
 }
 
