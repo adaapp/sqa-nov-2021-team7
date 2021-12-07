@@ -30,17 +30,30 @@ export const getItem = async (id: string): Promise<TodoItem[] | ErrorResponse> =
     };
 };
 
-export const createItem = async (params: Record<string, string> ): Promise<SuccessResponse | ErrorResponse> => {
-    const response = await axios.post(BASE_URL + `/item`, params);
-    const { status, statusText } = response;
+export const createItem = async (params: TodoItem): Promise<SuccessResponse | ErrorResponse> => {
+    try {
+        const response = await axios.post(BASE_URL + `/todo`, params);
+        const { status } = response.data;
 
-    if (status === OK) {
-        return <SuccessResponse> {
-            message: "Successfully created a todo item."
-        };
+        if (status) {
+            return <SuccessResponse> {
+                message: "Successfully created a todo item."
+            };
+        }
+    } catch (exception) {
+        const { response } = exception as { response: { data: { message: string }}};
+
+        if (response) {
+            const { message } = response.data;
+
+            return <ErrorResponse> {
+                error: message
+            };
+        }
     }
+
     return <ErrorResponse> {
-        error: statusText
+        error: "Internal server error."
     };
 };
 

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import Button from './Button';
+import { DeleteButton } from './Button';
 
 type ListItemProps = {
     message: string
@@ -23,7 +23,7 @@ const ListItem = (props: ListItemProps) => {
     return (
         <ListItemStyled>
             <Message>{props.message}</Message>
-            <Button onClick={() => console.log('Remove item api call here')}/>
+            <DeleteButton onClick={() => console.log('Remove item api call here')} dataTestId={"delete-button"}/>
         </ListItemStyled>
     );
 };

@@ -1,8 +1,8 @@
 export interface TodoItem {
-    id: string,
-    description: string,
-    modifiedAt: Date,
-    dueDate: Date
+    title: string,
+    description?: string,
+    dateCreated: Date,
+    dateDue?: Date
 }
 
 export interface SuccessResponse {

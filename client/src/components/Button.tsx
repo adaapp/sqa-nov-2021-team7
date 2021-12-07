@@ -3,10 +3,12 @@ import styled from "styled-components";
 import imgUrl from '../../binIcon.png';
 
 interface ButtonProps {
+    dataTestId: string
     onClick: MouseEventHandler
+    value?: string
 }
 
-const Input = styled.div`
+const DeleteIcon = styled.div`
     height: 20px;
     width: 20px;
     background-image: url(${imgUrl});
@@ -15,10 +17,24 @@ const Input = styled.div`
     background-size: 20px;
 `;
 
-const Button = (props: ButtonProps) => {
+const Button = styled.button`
+  margin: 5px;
+  width: 200px;
+`;
+
+export const CreateButton = (props: ButtonProps) => {
     return (
-        <Input onClick={props.onClick} />
+        <Button
+            data-test-id={props.dataTestId}
+            onClick={props.onClick}
+        >
+            {props.value}
+        </Button>
     );
 };
 
-export default Button;
+export const DeleteButton = (props: ButtonProps) => {
+    return (
+        <DeleteIcon onClick={props.onClick} />
+    );
+};
