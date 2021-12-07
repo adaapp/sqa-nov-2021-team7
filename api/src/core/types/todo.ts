@@ -5,3 +5,9 @@ export interface TodoItem {
     dateCreated: number;
     dateDue: number;
 }
+
+export interface UpdateData {
+    title: string;
+    description: string;
+    dateDue: number;
+}
