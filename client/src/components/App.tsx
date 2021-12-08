@@ -27,7 +27,7 @@ function App() {
     useEffect(() => {
         let state;
         if (searchValue) {
-            state = sortArray([...searchResults])
+            state = sortArray([...searchResults]);
             setSearchResults(state);
         } else {
             state = sortArray([...todos]);
