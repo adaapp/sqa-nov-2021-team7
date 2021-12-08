@@ -1,8 +1,8 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import { createItem, getItems} from "../services/apiservice";
 import { Button } from './Button';
 import { Input }  from './Input';
-import {ErrorResponse, SuccessResponse, TodoItem} from "../types/todo";
+import { ErrorResponse, SuccessResponse, TodoItem } from "../types/todo";
 
 import styled from "styled-components";
 import List from "./List";
@@ -16,10 +16,17 @@ function App() {
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
     const [todos, setTodos] = useState<TodoItem[]>([]);
+    const [isAscending, setAscending] = useState<boolean>(true);
 
     useEffect(() => {
         getAllTodos();
     }, []);
+
+    useEffect(() => {
+        const state = sortArray([...todos]);
+
+        setTodos(state);
+    }, [isAscending]);
 
     const createTodo = async () => {
         const params: TodoItem = {
@@ -37,7 +44,7 @@ function App() {
         const result = await getItems();
 
         if ("data" in result) {
-            setTodos(result.data as TodoItem[]);
+            setTodos(sortArray(result.data as TodoItem[]));
         }
     };
 
@@ -50,6 +57,12 @@ function App() {
         } else if (errorResponse.error) {
             setFeedback(errorResponse.error);
         }
+    };
+
+    const sortArray = (array: TodoItem[]) => {
+        return array.sort((itemOne, itemTwo) => {
+            return isAscending ? itemOne.dateCreated - itemTwo.dateCreated : itemTwo.dateCreated - itemOne.dateCreated;
+        });
     };
 
     return (
@@ -81,6 +94,11 @@ function App() {
                 dataTestId={"refresh-button"}
                 value={"Refresh"}
                 onClick={() => getAllTodos()}
+            />
+            <Button
+                dataTestId={`sort-button-${isAscending ? "descending" : "ascending"}`}
+                value={isAscending ? "Sort by Descending" : "Sort by Ascending"}
+                onClick={() => setAscending(!isAscending)}
             />
             <Feedback
                 data-test-id={"feedback"}
