@@ -3,25 +3,30 @@ name: Tests
 on:
   push:
     branches:
-      - main
+      - main # Only run the workflow on the main branch
   pull_request:
+    # Run the workflow whenever a pull request is created or updated
     types: [opened, synchronize, reopened]
 
 jobs:
   build:
+    # The build runs on the a Linux environment
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout the source code
       - name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
+      # Setup Node.js on the Linux environment with v16
       - name: Setup NPM
         uses: actions/setup-node@v2
         with:
           node-version: '16'
 
+      # Cache the node dependencies for faster install on the next build
       - name: Cache Node Dependencies
         uses: actions/cache@v2
         with:
@@ -29,26 +34,32 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: ${{ runner.os }}-node-
 
+      # Install the NPM dependencies for the API module
       - name: Install API NPM Dependencies
         working-directory: ./api
         run: npm ci
 
+      # Install the NPM dependencies for the client module
       - name: Install Client NPM Dependencies
         working-directory: ./client
         run: npm ci
 
+      # Check ESlint on the API module
       - name: API ESlint check
         working-directory: ./api
         run: npm run eslint
 
+      # Check ESlint on the client module
       - name: Client ESlint check
         working-directory: ./client
         run: npm run eslint
 
+      # Run the component tests in the API directory
       - name: Run API Tests
         working-directory: ./api
         run: npm test
 
+      # Run the unit and integration tests in the client directory
       - name: Run Client Tests
         working-directory: ./client
         run: npm test
