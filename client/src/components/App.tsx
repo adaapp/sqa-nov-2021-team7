@@ -15,7 +15,9 @@ function App() {
     const [feedback, setFeedback] = useState<string>("");
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
+    const [searchValue, setSearchValue] = useState<string>("");
     const [todos, setTodos] = useState<TodoItem[]>([]);
+    const [searchResults, setSearchResults] = useState<TodoItem[]>([]);
     const [isAscending, setAscending] = useState<boolean>(true);
 
     useEffect(() => {
@@ -23,10 +25,23 @@ function App() {
     }, []);
 
     useEffect(() => {
-        const state = sortArray([...todos]);
+        let state;
+        if (searchValue) {
+            state = sortArray([...searchResults])
+            setSearchResults(state);
+        } else {
+            state = sortArray([...todos]);
+            setTodos(state);
+        }
+    }, [searchValue, isAscending]);
 
-        setTodos(state);
-    }, [isAscending]);
+    useEffect(() => {
+        const state = todos.filter((item) => {
+            return item.title.toLowerCase().includes(searchValue.toLowerCase()) || item.description?.toLowerCase().includes(searchValue.toLowerCase());
+        });
+
+        setSearchResults(state);
+    }, [searchValue]);
 
     const createTodo = async () => {
         const params: TodoItem = {
@@ -89,6 +104,15 @@ function App() {
                     setDescription(target.value);
                 }}
             />
+            <Input
+                dataTestId={"search-input"}
+                placeholder={"Search items"}
+                value={searchValue}
+                onInput={(event) => {
+                    const target = event.target as HTMLInputElement;
+                    setSearchValue(target.value);
+                }}
+            />
             <Button
                 dataTestId={"create-button"}
                 value={"Create"}
@@ -109,7 +133,7 @@ function App() {
             >
                 { feedback }
             </Feedback>
-            <List dataTestId={"todo-item-list-container"} data={todos}/>
+            <List dataTestId={"todo-item-list-container"} data={searchValue ? searchResults : todos}/>
         </div>
     );
 }
