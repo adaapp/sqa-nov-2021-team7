@@ -38,6 +38,10 @@ function App() {
 
         const result = await createItem(params);
         updateFeedback(result);
+
+        if ("data" in result) {
+            setTodos([...todos, result.data] as TodoItem[]);
+        }
     };
 
     const getAllTodos = async () => {
