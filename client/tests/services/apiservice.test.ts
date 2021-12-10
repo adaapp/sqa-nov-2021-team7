@@ -39,7 +39,7 @@ describe("apiservice", () => {
             // Given
             const id = "0";
             const expectedResult: TodoItem[] = [
-                { title: "0", description: "To-do item", dateCreated: new Date().getTime(), dateDue: new Date().getTime()}
+                { title: "0", description: "To-do item", dateCreated: new Date().getTime(), dateDue: new Date().getTime(), id: '12345'}
             ];
             mockedAxios.get.mockResolvedValue({data: expectedResult, status: OK, statusText: "OK"});
 
@@ -73,7 +73,8 @@ describe("apiservice", () => {
             const data: TodoItem = {
                 title: "Title",
                 description: "Description",
-                dateCreated: new Date().getTime()
+                dateCreated: new Date().getTime(),
+                id: '12345'
             };
             const expectedResult = "Successfully created a todo item.";
             mockedAxios.post.mockResolvedValue({ data: { status: true }, status: OK });
@@ -91,7 +92,8 @@ describe("apiservice", () => {
             const data: TodoItem = {
                 title: "Title",
                 description: "Description",
-                dateCreated: new Date().getTime()
+                dateCreated: new Date().getTime(),
+                id: '12345'
             };
             const expectedResult = "Failed to create todo item.";
             mockedAxios.post.mockImplementation(() => {
@@ -122,7 +124,7 @@ describe("apiservice", () => {
                 description: "Updated description"
             };
             const expectedResult: TodoItem[] = [
-                { title: "0", description: "Updated description", dateCreated: new Date().getTime(), dateDue: new Date().getTime() }
+                { title: "0", description: "Updated description", dateCreated: new Date().getTime(), dateDue: new Date().getTime(), id: '12345' }
             ];
             mockedAxios.put.mockResolvedValue({ data: expectedResult, status: OK, statusText: "OK" });
 
@@ -164,7 +166,7 @@ describe("apiservice", () => {
             const result = await deleteItem(id) as SuccessResponse;
 
             // Then
-            expect(mockedAxios.delete).toHaveBeenCalledWith(BASE_URL + `/item/${id}`);
+            expect(mockedAxios.delete).toHaveBeenCalledWith(BASE_URL + `/todo/${id}`);
             expect(result.message).toBe(expectedResult);
         });
 
@@ -178,7 +180,7 @@ describe("apiservice", () => {
             const result = await deleteItem(id) as ErrorResponse;
 
             // Then
-            expect(mockedAxios.delete).toHaveBeenCalledWith(BASE_URL + `/item/${id}`);
+            expect(mockedAxios.delete).toHaveBeenCalledWith(BASE_URL + `/todo/${id}`);
             expect(result.error).toBe(expectedResult);
         });
     });
@@ -187,9 +189,9 @@ describe("apiservice", () => {
         it("should successfully retrieve a list of todo items", async () => {
             // Given
             const expectedResult: TodoItem[] = [
-                { title: "0", description: "Description 0", dateCreated: new Date().getTime(), dateDue: new Date().getTime() },
-                { title: "1", description: "Description 1", dateCreated: new Date().getTime(), dateDue: new Date().getTime() },
-                { title: "2", description: "Description 2", dateCreated: new Date().getTime(), dateDue: new Date().getTime() }
+                { title: "0", description: "Description 0", dateCreated: new Date().getTime(), dateDue: new Date().getTime(), id: '12345' },
+                { title: "1", description: "Description 1", dateCreated: new Date().getTime(), dateDue: new Date().getTime(), id: '12345' },
+                { title: "2", description: "Description 2", dateCreated: new Date().getTime(), dateDue: new Date().getTime(), id: '12345' }
             ];
             mockedAxios.get.mockResolvedValue({ data: expectedResult, status: OK, statusText: "OK" });
 

@@ -5,12 +5,16 @@ import {TodoItem} from "../src/types/todo";
 
 describe("List", () => {
     it("renders correctly", () => {
+        const mockFn = (id: string): Promise<void> => {
+            throw new Error();
+        };
+
         const data: TodoItem[] = [
-            { title: "Title 1", description: "Description 1", dateCreated: 1638481494503, dateDue: 1638481506034 },
-            { title: "Title 2", description: "Description 2", dateCreated: 1638481592159, dateDue: 1638482265360 }
+            { title: "Title 1", description: "Description 1", dateCreated: 1638481494503, dateDue: 1638481506034, id: '12345' },
+            { title: "Title 2", description: "Description 2", dateCreated: 1638481592159, dateDue: 1638482265360, id: '12345'  }
         ];
 
-        const { getByText } = render(<List dataTestId={"todo-item-list-container"} data={data}/>);
+        const { getByText } = render(<List dataTestId={"todo-item-list-container"} data={data} deleteTodo={mockFn}/>);
 
         data.map((item) => {
             const { title, description, dateCreated, dateDue } = item;

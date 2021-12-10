@@ -3,7 +3,7 @@ export interface TodoItem {
     description?: string,
     dateCreated: number,
     dateDue?: number,
-    deleteTodo: (id: string) => Promise<void>,
+    deleteTodo?: (id: string) => Promise<void>,
     id: string
 }
 
