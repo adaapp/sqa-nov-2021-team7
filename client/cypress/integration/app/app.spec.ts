@@ -62,6 +62,112 @@ describe('to-do app', () => {
         });
     });
 
+    describe("searching ", () => {
+        beforeEach(() => {
+            cy.intercept('GET', '/todo', {
+                statusCode: 200,
+                body: [
+                    { title: "Apple", description: "iPhone", dateCreated: new Date().getTime(), dateDue: new Date().getTime() },
+                    { title: "Banana", description: "Cake", dateCreated: new Date().getTime() + (5 * ONE_MINUTE_IN_MILLISECONDS), dateDue: new Date().getTime() + (5 * ONE_MINUTE_IN_MILLISECONDS) },
+                    { title: "Carrot", description: "Juice", dateCreated: new Date().getTime() + (10 * ONE_MINUTE_IN_MILLISECONDS), dateDue: new Date().getTime() + (10 * ONE_MINUTE_IN_MILLISECONDS) },
+                    { title: "Almond", description: "Fruitcake", dateCreated: new Date().getTime() + (10 * ONE_MINUTE_IN_MILLISECONDS), dateDue: new Date().getTime() + (10 * ONE_MINUTE_IN_MILLISECONDS) }
+                ]
+            }).as("getItems");
+
+            cy.visit('http://localhost:3000');
+
+            cy.wait('@getItems');
+        })
+
+        it('should search for existing todo items based on title and description that contains the search value', () => {
+            cy.get('[data-test-id=search-input]').type("Apple");
+
+            cy.get('[data-test-id=todo-item-0]').should('be.visible');
+            cy.get('[data-test-id=todo-item-0]').contains('Apple');
+            cy.get('[data-test-id=todo-item-0]').contains('iPhone');
+
+            cy.get('[data-test-id=todo-item-1]').should('not.exist');
+            cy.get('[data-test-id=todo-item-2]').should('not.exist');
+
+            cy.get('[data-test-id=search-input]').clear();
+            cy.get('[data-test-id=search-input]').type("Cake");
+
+            cy.get('[data-test-id=todo-item-0]').should('be.visible');
+            cy.get('[data-test-id=todo-item-0]').contains('Banana');
+            cy.get('[data-test-id=todo-item-0]').contains('Cake');
+            cy.get('[data-test-id=todo-item-1]').contains('Almond');
+            cy.get('[data-test-id=todo-item-1]').contains('Fruitcake');
+
+            cy.get('[data-test-id=todo-item-2]').should('not.exist');
+            cy.get('[data-test-id=todo-item-3]').should('not.exist');
+        });
+
+        it('should search for existing todo items regardless of case sensitivity', () => {
+            cy.get('[data-test-id=search-input]').type("Carrot");
+
+            cy.get('[data-test-id=todo-item-0]').should('be.visible');
+            cy.get('[data-test-id=todo-item-0]').contains('Carrot');
+            cy.get('[data-test-id=todo-item-0]').contains('Juice');
+
+            cy.get('[data-test-id=search-input]').clear();
+            cy.get('[data-test-id=search-input]').type("carrot");
+
+            cy.get('[data-test-id=todo-item-0]').should('be.visible');
+            cy.get('[data-test-id=todo-item-0]').contains('Carrot');
+            cy.get('[data-test-id=todo-item-0]').contains('Juice');
+        });
+
+        it('should not return any results if it cannot match any title or description', () => {
+            cy.get('[data-test-id=search-input]').type("SpaceX sponsored this assignment.");
+
+            cy.get('[data-test-id=todo-item-0]').should('not.exist');
+            cy.get('[data-test-id=todo-item-1]').should('not.exist');
+            cy.get('[data-test-id=todo-item-2]').should('not.exist');
+            cy.get('[data-test-id=todo-item-3]').should('not.exist');
+        });
+
+        it('should sort the search results by ascending and descending order', () => {
+            cy.get('[data-test-id=search-input]').type("Cake");
+
+            cy.get('[data-test-id=todo-item-0]').should('be.visible');
+            cy.get('[data-test-id=todo-item-0]').contains('Banana');
+            cy.get('[data-test-id=todo-item-0]').contains('Cake');
+            cy.get('[data-test-id=todo-item-1]').should('be.visible');
+            cy.get('[data-test-id=todo-item-1]').contains('Almond');
+            cy.get('[data-test-id=todo-item-1]').contains('Fruitcake');
+
+            cy.get('[data-test-id=sort-button-descending]').click();
+            cy.get('[data-test-id=todo-item-0]').contains('Almond');
+            cy.get('[data-test-id=todo-item-0]').contains('Fruitcake');
+            cy.get('[data-test-id=todo-item-1]').contains('Banana');
+            cy.get('[data-test-id=todo-item-1]').contains('Cake');
+
+            cy.get('[data-test-id=sort-button-ascending]').click();
+            cy.get('[data-test-id=todo-item-0]').contains('Banana');
+            cy.get('[data-test-id=todo-item-0]').contains('Cake');
+            cy.get('[data-test-id=todo-item-1]').contains('Almond');
+            cy.get('[data-test-id=todo-item-1]').contains('Fruitcake');
+        });
+
+        it('should reset back to default if there is no search value', () => {
+            cy.get('[data-test-id=search-input]').type("Almond");
+
+            cy.get('[data-test-id=todo-item-0]').should('be.visible');
+            cy.get('[data-test-id=todo-item-0]').contains('Almond');
+            cy.get('[data-test-id=todo-item-0]').contains('Fruitcake');
+
+            cy.get('[data-test-id=todo-item-1]').should('not.exist');
+            cy.get('[data-test-id=todo-item-2]').should('not.exist');
+            cy.get('[data-test-id=todo-item-3]').should('not.exist');
+
+            cy.get('[data-test-id=search-input]').clear();
+            cy.get('[data-test-id=todo-item-0]').should('be.visible');
+            cy.get('[data-test-id=todo-item-1]').should('be.visible');
+            cy.get('[data-test-id=todo-item-2]').should('be.visible');
+            cy.get('[data-test-id=todo-item-3]').should('be.visible');
+        });
+    });
+
     describe("create items", () => {
         beforeEach(() => {
             cy.visit('http://localhost:3000');
