@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 import { DeleteButton } from './Button';
 import { TodoItem } from "../types/todo";
-import { deleteItem } from '../components/App';
+import { deleteItem } from '../services/apiservice';
 
 type ListItemProps = {
     dataTestId: string,
