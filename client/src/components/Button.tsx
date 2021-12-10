@@ -6,6 +6,7 @@ interface ButtonProps {
     dataTestId: string
     onClick: MouseEventHandler
     value?: string
+    index?: number
 }
 
 const DeleteIcon = styled.div`
@@ -34,7 +35,8 @@ export const Button = (props: ButtonProps) => {
 };
 
 export const DeleteButton = (props: ButtonProps) => {
+    const { index, onClick } = props;
     return (
-        <DeleteIcon onClick={props.onClick} />
+        <DeleteIcon data-test-id={`${props.dataTestId}-${index}`} onClick={onClick} />
     );
 };

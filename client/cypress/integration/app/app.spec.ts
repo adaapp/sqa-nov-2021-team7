@@ -57,8 +57,6 @@ describe('to-do app', () => {
             cy.get('[data-test-id=todo-item-0]').contains('Title 1');
             cy.get('[data-test-id=todo-item-1]').contains('Title 2');
             cy.get('[data-test-id=todo-item-2]').contains('Title 3');
-
-
         });
     });
 
@@ -233,7 +231,6 @@ describe('to-do app', () => {
             cy.get('[data-test-id=todo-item-0]').contains('Title');
             cy.get('[data-test-id=todo-item-0]').contains('Description');
             cy.get('[data-test-id=todo-item-0]').contains('07/12/2021, 13:53');
-
         });
     });
 
@@ -285,6 +282,66 @@ describe('to-do app', () => {
             cy.get('[data-test-id=todo-item-0]').contains('Title');
             cy.get('[data-test-id=todo-item-1]').should('be.visible');
             cy.get('[data-test-id=todo-item-1]').contains('Title 2');
+        });
+    });
+
+    describe('delete todo items', () => {
+        const id = 12345;
+
+        beforeEach(() => {
+            cy.visit('http://localhost:3000');
+
+        });
+
+        it('should delete an item when the delete button is clicked', () => {
+            cy.intercept('GET', '/todo', {
+                statusCode: 200,
+                body: [
+                    {
+                        title: 'Title',
+                        description: 'Description',
+                        dateCreated: new Date().getTime(),
+                        dateDue: new Date().getTime(),
+                        id
+                    }
+                ]
+            }).as('getItems');
+
+            cy.wait('@getItems');
+
+            cy.get('[data-test-id=todo-item-list-container]').should('be.visible');
+            cy.get('[data-test-id=todo-item-0]').should('be.visible');
+
+            cy.intercept('DELETE', `/todo/${id}`, {statusCode: 200});
+
+            cy.get('[data-test-id=delete-button-0]').click();
+
+            cy.get('[data-test-id=todo-item-list-container]').should('not.be.visible');
+            cy.get('[data-test-id=todo-item-list-container]').should('exist');
+            cy.get('[data-test-id=todo-item-0]').should('not.exist');
+        });
+
+        it('should only delete the specified item when a button is clicked', () => {
+            cy.intercept('GET', '/todo', {
+                statusCode: 200,
+                body: [
+                    { title: "Title 1", description: "Description 1", dateCreated: new Date().getTime(), dateDue: new Date().getTime(), id},
+                    { title: "Title 2", description: "Description 2", dateCreated: new Date().getTime(), dateDue: new Date().getTime() }
+                ]
+            }).as("getItems");
+
+            cy.wait('@getItems');
+
+            cy.get('[data-test-id=todo-item-list-container]').should('be.visible');
+            cy.get('[data-test-id=todo-item-0]').should('be.visible');
+            cy.get('[data-test-id=todo-item-1]').should('be.visible');
+
+            cy.intercept('DELETE', `/todo/${id}`, {statusCode: 200});
+
+            cy.get('[data-test-id=delete-button-0]').click();
+
+            cy.get('[data-test-id=todo-item-0]').should('be.visible');
+            cy.get('[data-test-id=todo-item-1]').should('not.exist');
         });
     });
 });

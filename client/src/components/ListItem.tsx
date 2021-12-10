@@ -7,7 +7,8 @@ import { TodoItem } from "../types/todo";
 type ListItemProps = {
     dataTestId: string,
     listItem: TodoItem,
-    deleteTodo: (id: string) => Promise<void>
+    deleteTodo: (id: string) => Promise<void>,
+    index: number
 }
 
 const Text = styled.div`
@@ -24,7 +25,7 @@ const ListItemStyled = styled.div`
 `;
 
 const ListItem = (props: ListItemProps) => {
-    const { dataTestId, listItem, deleteTodo } = props;
+    const { dataTestId, listItem, deleteTodo, index } = props;
 
     return (
         <ListItemStyled data-test-id={dataTestId}>
@@ -32,7 +33,7 @@ const ListItem = (props: ListItemProps) => {
             <Text>{listItem.description}</Text>
             <Text>{formatTime(listItem.dateCreated)}</Text>
             <Text>{listItem.dateDue ? formatTime(listItem.dateDue) : ""}</Text>
-            <DeleteButton onClick={() => deleteTodo(listItem.id)} dataTestId={"delete-button"}/>
+            <DeleteButton onClick={() => deleteTodo(listItem.id)} dataTestId={"delete-button"} index={index}/>
         </ListItemStyled>
     );
 };

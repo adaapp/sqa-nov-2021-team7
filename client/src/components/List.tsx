@@ -18,7 +18,7 @@ const List = (props: ListProps) => {
     return (
         <ListContainer data-test-id={dataTestId}>
             {data.map((item, index) => {
-                return <ListItem dataTestId={`todo-item-${index}`} listItem={data[index]} key={index} deleteTodo={deleteTodo}/>;
+                return <ListItem dataTestId={`todo-item-${index}`} listItem={data[index]} key={index} deleteTodo={deleteTodo} index={index}/>;
             })}
         </ListContainer>
     );
