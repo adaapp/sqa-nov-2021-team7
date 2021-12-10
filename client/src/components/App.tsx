@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import { createItem, getItems} from "../services/apiservice";
+import { createItem, getItems, deleteItem } from "../services/apiservice";
 import { Button } from './Button';
 import { Input }  from './Input';
 import {ErrorResponse, SuccessResponse, TodoItem} from "../types/todo";
@@ -26,7 +26,8 @@ function App() {
             title: title,
             description: description,
             dateCreated: new Date().getTime(),
-            dateDue: new Date().getTime()
+            dateDue: new Date().getTime(),
+            id: ''
         };
 
         const result = await createItem(params);
@@ -50,6 +51,10 @@ function App() {
         } else if (errorResponse.error) {
             setFeedback(errorResponse.error);
         }
+    };
+
+    const deleteItem = () => {
+
     };
 
     return (

@@ -1,7 +1,8 @@
 import styled from "styled-components";
 
 import { DeleteButton } from './Button';
-import {TodoItem} from "../types/todo";
+import { TodoItem } from "../types/todo";
+import { deleteItem } from '../components/App';
 
 type ListItemProps = {
     dataTestId: string,
@@ -30,7 +31,7 @@ const ListItem = (props: ListItemProps) => {
             <Text>{listItem.description}</Text>
             <Text>{formatTime(listItem.dateCreated)}</Text>
             <Text>{listItem.dateDue ? formatTime(listItem.dateDue) : ""}</Text>
-            <DeleteButton onClick={() => console.log('Remove item api call here')} dataTestId={"delete-button"}/>
+            <DeleteButton onClick={() => deleteItem(listItem.id)} dataTestId={"delete-button"}/>
         </ListItemStyled>
     );
 };
