@@ -8,8 +8,8 @@ describe("Todo route", () => {
         id: "id",
         title: "Title",
         description: "description",
-        dateCreated: new Date().getTime(),
-        dateDue: new Date().getTime()
+        dateCreated: 1638886474740,
+        dateDue: 1638886490587
     };
 
     beforeEach(() => {
@@ -122,6 +122,83 @@ describe("Todo route", () => {
             expect(res.statusCode).toBe(200);
             expect(getTodoItems()).toHaveLength(0);
             expect(res.body).toHaveProperty("status", true);
+        });
+    });
+
+    describe("POST /todo/:id", () => {
+        it("should only update the title if provided in request", async () => {
+            const item = addTodo(testTodoItem);
+            expect(item?.title).toBe("Title");
+
+            const res = await request(server)
+                .post(`/todo/${item?.id}`)
+                .type("json")
+                .send({
+                    title: "Different Title"
+                });
+
+            expect(res.statusCode).toBe(200);
+            expect(res.body).toHaveProperty("status", true);
+            expect(getTodoItems()[0].title).toBe("Different Title");
+        });
+
+        it("should only update the description if provided in request", async () => {
+            const item = addTodo(testTodoItem);
+            expect(item?.description).toBe("description");
+
+            const res = await request(server)
+                .post(`/todo/${item?.id}`)
+                .type("json")
+                .send({
+                    description: "Different Description"
+                });
+
+            expect(res.statusCode).toBe(200);
+            expect(res.body).toHaveProperty("status", true);
+            expect(getTodoItems()[0].description).toBe("Different Description");
+        });
+
+        it("should only update the dateDue if provided in request", async () => {
+            const item = addTodo(testTodoItem);
+            expect(item?.dateDue).toBe(1638886490587);
+
+            const res = await request(server)
+                .post(`/todo/${item?.id}`)
+                .type("json")
+                .send({
+                    dateDue: 1638886517175
+                });
+
+            expect(res.statusCode).toBe(200);
+            expect(res.body).toHaveProperty("status", true);
+            expect(getTodoItems()[0].dateDue).toBe(1638886517175);
+        });
+
+        it("should not update fields that cannot be updated", async () => {
+            const item = addTodo(testTodoItem);
+
+            await request(server)
+                .post(`/todo/${item?.id}`)
+                .type("json")
+                .send({
+                    dateCreated: 1638886517175
+                });
+
+            expect(getTodoItems()[0].dateCreated).not.toBe(1638886517175);
+        });
+
+        it("cannot update todo item that does not exist", async () => {
+            addTodo(testTodoItem);
+
+            const res = await request(server)
+                .post("/todo/id-does-not-exist")
+                .type("json")
+                .send({
+                    title: "hi"
+                });
+
+            expect(res.statusCode).toBe(400);
+            expect(res.body).toHaveProperty("status", false);
         });
     });
 });

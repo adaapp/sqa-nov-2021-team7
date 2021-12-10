@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid";
-import { TodoItem } from "./types/todo";
+import { TodoItem, UpdateData } from "./types/todo";
 
 const EMPTY_LENGTH = 0;
 
@@ -40,4 +40,22 @@ export function removeSingleItem(id: string): boolean {
         return exists;
     }
     return false;
+}
+
+export function todoItemExists(id: string): boolean {
+    return id in todoCache;
+}
+
+export function updateSingleTodoItem(id: string, updateData: UpdateData): void {
+    const todo = todoCache[id];
+
+    const title = updateData.title ? updateData.title : todo.title;
+    const description = updateData.description ? updateData.description : todo.description;
+    const dateDue = updateData.dateDue ? updateData.dateDue : todo.dateDue;
+
+    todo.title = title;
+    todo.description = description;
+    todo.dateDue = dateDue;
+
+    todoCache[id] = todo;
 }

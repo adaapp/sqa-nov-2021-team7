@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import { createItem, getItems, deleteItem } from "../services/apiservice";
 import { Button } from './Button';
 import { Input }  from './Input';
-import {ErrorResponse, SuccessResponse, TodoItem} from "../types/todo";
+import { ErrorResponse, SuccessResponse, TodoItem } from "../types/todo";
 
 import styled from "styled-components";
 import List from "./List";
@@ -15,11 +15,33 @@ function App() {
     const [feedback, setFeedback] = useState<string>("");
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
+    const [searchValue, setSearchValue] = useState<string>("");
     const [todos, setTodos] = useState<TodoItem[]>([]);
+    const [searchResults, setSearchResults] = useState<TodoItem[]>([]);
+    const [isAscending, setAscending] = useState<boolean>(true);
 
     useEffect(() => {
         getAllTodos();
     }, []);
+
+    useEffect(() => {
+        let state;
+        if (searchValue) {
+            state = sortArray([...searchResults]);
+            setSearchResults(state);
+        } else {
+            state = sortArray([...todos]);
+            setTodos(state);
+        }
+    }, [searchValue, isAscending]);
+
+    useEffect(() => {
+        const state = todos.filter((item) => {
+            return item.title.toLowerCase().includes(searchValue.toLowerCase()) || item.description?.toLowerCase().includes(searchValue.toLowerCase());
+        });
+
+        setSearchResults(state);
+    }, [searchValue]);
 
     const createTodo = async () => {
         const params: TodoItem = {
@@ -33,6 +55,10 @@ function App() {
 
         const result = await createItem(params);
         updateFeedback(result);
+
+        if ("data" in result) {
+            setTodos([...todos, result.data] as TodoItem[]);
+        }
     };
 
     const deleteTodo = async (id: string) => {
@@ -46,6 +72,8 @@ function App() {
                 setTodos([...state]);
             }
         }
+
+        updateFeedback(result);
     };
 
 
@@ -53,7 +81,7 @@ function App() {
         const result = await getItems();
 
         if ("data" in result) {
-            setTodos(result.data as TodoItem[]);
+            setTodos(sortArray(result.data as TodoItem[]));
         }
     };
 
@@ -66,6 +94,12 @@ function App() {
         } else if (errorResponse.error) {
             setFeedback(errorResponse.error);
         }
+    };
+
+    const sortArray = (array: TodoItem[]) => {
+        return array.sort((itemOne, itemTwo) => {
+            return isAscending ? itemOne.dateCreated - itemTwo.dateCreated : itemTwo.dateCreated - itemOne.dateCreated;
+        });
     };
 
     return (
@@ -88,6 +122,15 @@ function App() {
                     setDescription(target.value);
                 }}
             />
+            <Input
+                dataTestId={"search-input"}
+                placeholder={"Search items"}
+                value={searchValue}
+                onInput={(event) => {
+                    const target = event.target as HTMLInputElement;
+                    setSearchValue(target.value);
+                }}
+            />
             <Button
                 dataTestId={"create-button"}
                 value={"Create"}
@@ -98,12 +141,17 @@ function App() {
                 value={"Refresh"}
                 onClick={() => getAllTodos()}
             />
+            <Button
+                dataTestId={`sort-button-${isAscending ? "descending" : "ascending"}`}
+                value={isAscending ? "Sort by Descending" : "Sort by Ascending"}
+                onClick={() => setAscending(!isAscending)}
+            />
             <Feedback
                 data-test-id={"feedback"}
             >
                 { feedback }
             </Feedback>
-            <List dataTestId={"todo-item-list-container"} data={todos} deleteTodo={deleteTodo}/>
+            <List dataTestId={"todo-item-list-container"} data={searchValue ? searchResults : todos} deleteTodo={deleteTodo}/>
         </div>
     );
 }
