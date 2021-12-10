@@ -27,12 +27,27 @@ function App() {
             description: description,
             dateCreated: new Date().getTime(),
             dateDue: new Date().getTime(),
+            deleteTodo,
             id: ''
         };
 
         const result = await createItem(params);
         updateFeedback(result);
     };
+
+    const deleteTodo = async (id: string) => {
+        const result = await deleteItem(id);
+        const state = todos;
+
+        if ("id" in result) {
+            const element: TodoItem | undefined = state.find(element => element.id === result.id);
+            if (element) {
+                state.splice(state.indexOf(element), 1);
+                setTodos([...state]);
+            }
+        }
+    };
+
 
     const getAllTodos = async () => {
         const result = await getItems();
@@ -51,10 +66,6 @@ function App() {
         } else if (errorResponse.error) {
             setFeedback(errorResponse.error);
         }
-    };
-
-    const deleteItem = () => {
-
     };
 
     return (
@@ -92,7 +103,7 @@ function App() {
             >
                 { feedback }
             </Feedback>
-            <List dataTestId={"todo-item-list-container"} data={todos}/>
+            <List dataTestId={"todo-item-list-container"} data={todos} deleteTodo={deleteTodo}/>
         </div>
     );
 }

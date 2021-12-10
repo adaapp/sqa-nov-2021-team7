@@ -2,11 +2,12 @@ import styled from "styled-components";
 
 import { DeleteButton } from './Button';
 import { TodoItem } from "../types/todo";
-import { deleteItem } from '../services/apiservice';
+// import { deleteItem } from '../services/apiservice';
 
 type ListItemProps = {
     dataTestId: string,
-    listItem: TodoItem
+    listItem: TodoItem,
+    deleteTodo: (id: string) => Promise<void>
 }
 
 const Text = styled.div`
@@ -23,7 +24,7 @@ const ListItemStyled = styled.div`
 `;
 
 const ListItem = (props: ListItemProps) => {
-    const { dataTestId, listItem } = props;
+    const { dataTestId, listItem, deleteTodo } = props;
 
     return (
         <ListItemStyled data-test-id={dataTestId}>
@@ -31,7 +32,7 @@ const ListItem = (props: ListItemProps) => {
             <Text>{listItem.description}</Text>
             <Text>{formatTime(listItem.dateCreated)}</Text>
             <Text>{listItem.dateDue ? formatTime(listItem.dateDue) : ""}</Text>
-            <DeleteButton onClick={() => deleteItem(listItem.id)} dataTestId={"delete-button"}/>
+            <DeleteButton onClick={() => deleteTodo(listItem.id)} dataTestId={"delete-button"}/>
         </ListItemStyled>
     );
 };

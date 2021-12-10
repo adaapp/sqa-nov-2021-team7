@@ -76,7 +76,8 @@ export const deleteItem = async (id: string): Promise<SuccessResponse | ErrorRes
 
     if (status === OK) {
         return <SuccessResponse> {
-            message: "Successfully deleted an item."
+            message: "Successfully deleted an item.",
+            id
         };
     }
     return <ErrorResponse> {

@@ -3,12 +3,14 @@ export interface TodoItem {
     description?: string,
     dateCreated: number,
     dateDue?: number,
+    deleteTodo: (id: string) => Promise<void>,
     id: string
 }
 
 export interface SuccessResponse {
     data?: unknown,
     message?: string
+    id?: string
 }
 
 export interface ErrorResponse {
