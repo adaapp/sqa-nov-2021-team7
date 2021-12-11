@@ -49,7 +49,6 @@ function App() {
             description: description,
             dateCreated: new Date().getTime(),
             dateDue: new Date().getTime(),
-            deleteTodo,
             id: ''
         };
 
@@ -63,14 +62,11 @@ function App() {
 
     const deleteTodo = async (id: string) => {
         const result = await deleteItem(id);
-        const state = todos;
 
         if ("id" in result) {
-            const element: TodoItem | undefined = state.find(element => element.id === result.id);
-            if (element) {
-                state.splice(state.indexOf(element), 1);
-                setTodos([...state]);
-            }
+            setTodos(todos.filter(todo => {
+                return todo.id !== result.id;
+            }));
         }
 
         updateFeedback(result);
