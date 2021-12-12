@@ -41,9 +41,9 @@ jobs:
 
       # Run the Cypress tests
       - name: Run API Tests
-        run: cd client
         uses: cypress-io/github-action@v2
         with:
+          working-directory: client
           start: npm start
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
