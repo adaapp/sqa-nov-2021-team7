@@ -12,8 +12,7 @@
     "test:coverage": "jest tests --coverage",
     "eslint": "eslint 'src/**/*'",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run-ct",
-    "cypress:ci": "npm start & wait-on http://localhost:3000 && npm run cypress:run"
+    "cypress:run": "cypress run"
   },
   "dependencies": {
     "axios": "^0.24.0",
