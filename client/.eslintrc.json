@@ -24,7 +24,7 @@
         }
     },
     "rules": {
-        "no-extra-parens": "off",
+        "no-extra-parens": "error",
         "no-unexpected-multiline": "error",
 
         "curly": "error",

@@ -197,12 +197,13 @@ describe("apiservice", () => {
 
             // When
             const result = await getItems() as SuccessResponse;
+            const data = result.data as TodoItem[];
 
             // Then
             expect(mockedAxios.get).toHaveBeenCalledWith(BASE_URL + `/todo`);
-            expect(Array.isArray(result.data)).toBeTruthy();
-            expect((result.data as TodoItem[]).length).toBe(3);
-            expect(result.data).toEqual(expectedResult);
+            expect(Array.isArray(data)).toBeTruthy();
+            expect(data.length).toBe(3);
+            expect(data).toEqual(expectedResult);
         });
 
         it("should return an empty array of todo items if call was successful.", async () => {
