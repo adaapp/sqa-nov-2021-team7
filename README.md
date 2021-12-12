@@ -1,5 +1,9 @@
 # sqa-nov-2021-team7
 
+[![API Tests](https://github.com/adaapp/sqa-nov-2021-team7/actions/workflows/api.yml/badge.svg?branch=main)](https://github.com/adaapp/sqa-nov-2021-team7/actions/workflows/api.yml)
+[![Client Tests](https://github.com/adaapp/sqa-nov-2021-team7/actions/workflows/client.yml/badge.svg?branch=main)](https://github.com/adaapp/sqa-nov-2021-team7/actions/workflows/client.yml)
+[![E2E Tests](https://github.com/adaapp/sqa-nov-2021-team7/actions/workflows/e2e.yml/badge.svg?branch=main)](https://github.com/adaapp/sqa-nov-2021-team7/actions/workflows/e2e.yml)
+
 **Google Meet Link**  
 https://meet.google.com/jqg-jvhc-uvk
 
