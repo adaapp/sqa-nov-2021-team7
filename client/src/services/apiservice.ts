@@ -72,12 +72,13 @@ export const updateItem = async (id: string, params: Record<string, string> ): P
 };
 
 export const deleteItem = async (id: string): Promise<SuccessResponse | ErrorResponse> => {
-    const response = await axios.delete(BASE_URL + `/item/${id}`);
+    const response = await axios.delete(BASE_URL + `/todo/${id}`);
     const { status, statusText } = response;
 
     if (status === OK) {
         return <SuccessResponse> {
-            message: "Successfully deleted an item."
+            message: "Successfully deleted an item.",
+            id
         };
     }
     return <ErrorResponse> {

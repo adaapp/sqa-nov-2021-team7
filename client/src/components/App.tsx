@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { createItem, getItems} from "../services/apiservice";
+import {useEffect, useState} from 'react';
+import { createItem, getItems, deleteItem } from "../services/apiservice";
 import { Button } from './Button';
 import { Input }  from './Input';
 import { ErrorResponse, SuccessResponse, TodoItem } from "../types/todo";
@@ -48,7 +48,8 @@ function App() {
             title: title,
             description: description,
             dateCreated: new Date().getTime(),
-            dateDue: new Date().getTime()
+            dateDue: new Date().getTime(),
+            id: ''
         };
 
         const result = await createItem(params);
@@ -58,6 +59,19 @@ function App() {
             setTodos([...todos, result.data] as TodoItem[]);
         }
     };
+
+    const deleteTodo = async (id: string) => {
+        const result = await deleteItem(id);
+
+        if ("id" in result) {
+            setTodos(todos.filter(todo => {
+                return todo.id !== result.id;
+            }));
+        }
+
+        updateFeedback(result);
+    };
+
 
     const getAllTodos = async () => {
         const result = await getItems();
@@ -133,7 +147,7 @@ function App() {
             >
                 { feedback }
             </Feedback>
-            <List dataTestId={"todo-item-list-container"} data={searchValue ? searchResults : todos}/>
+            <List dataTestId={"todo-item-list-container"} data={searchValue ? searchResults : todos} deleteTodo={deleteTodo}/>
         </div>
     );
 }
