@@ -2,12 +2,13 @@ export interface TodoItem {
     id: string;
     title: string;
     description: string;
-    dateCreated: number;
-    dateDue: number;
+    dateCreated: Date;
+    dateDue: Date;
 }
 
 export interface UpdateData {
     title: string;
     description: string;
-    dateDue: number;
+    dateDue: Date;
+    id?: string;
 }

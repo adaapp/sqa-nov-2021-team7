@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { UpdateData } from '../../../api/src/core/types/todo';
 import {ErrorResponse, SuccessResponse, TodoItem} from "../types/todo";
 
 export const OK = 200;
@@ -59,12 +60,15 @@ export const createItem = async (params: TodoItem): Promise<SuccessResponse | Er
     };
 };
 
-export const updateItem = async (id: string, params: Record<string, string> ): Promise<TodoItem[] | ErrorResponse> => {
-    const response = await axios.put(BASE_URL + `/item/${id}`, params);
+export const updateItem = async (updateData: UpdateData ): Promise<SuccessResponse | ErrorResponse> => {
+    const response = await axios.post(BASE_URL + `/todo/${updateData.id}`, updateData);
     const { data, status, statusText } = response;
 
     if (status === OK) {
-        return data;
+        return <SuccessResponse> {
+            data,
+            id: updateData.id
+        };
     }
     return <ErrorResponse> {
         error: statusText

@@ -1,11 +1,13 @@
 import {useEffect, useState} from 'react';
-import { createItem, getItems, deleteItem } from "../services/apiservice";
+import { createItem, getItems, deleteItem, updateItem } from "../services/apiservice";
 import { Button } from './Button';
 import { Input }  from './Input';
 import { ErrorResponse, SuccessResponse, TodoItem } from "../types/todo";
+import { UpdateData } from '../../../api/src/core/types/todo';
 
 import styled from "styled-components";
 import List from "./List";
+import { UpdateForm } from './UpdateForm';
 
 const Feedback = styled.div`
 
@@ -19,6 +21,8 @@ function App() {
     const [todos, setTodos] = useState<TodoItem[]>([]);
     const [searchResults, setSearchResults] = useState<TodoItem[]>([]);
     const [isAscending, setAscending] = useState<boolean>(true);
+    const [selectedTodoData, setSelectedTodoData] = useState<UpdateData>({title: '', description: '', dateDue: new Date()} as UpdateData);
+    const [updateFormVisible, setUpdateFormVisible] = useState<boolean>(false);
 
     useEffect(() => {
         getAllTodos();
@@ -47,8 +51,8 @@ function App() {
         const params: TodoItem = {
             title: title,
             description: description,
-            dateCreated: new Date().getTime(),
-            dateDue: new Date().getTime(),
+            dateCreated: new Date(),
+            dateDue: new Date(),
             id: ''
         };
 
@@ -72,6 +76,32 @@ function App() {
         updateFeedback(result);
     };
 
+    const updateTodo = async (updateData: UpdateData) => {
+        const result = await updateItem(updateData);
+
+        if ('id' in result) {
+            const todosWithoutTarget = todos.filter(todo => {
+                return todo.id !== result.id;
+            });
+            const oldTodo = todos.find(todo => {
+                return todo.id === result.id;
+            });
+
+            if (oldTodo) {
+                const newTodo = {
+                    title: updateData.title || oldTodo.title,
+                    description: updateData.description || oldTodo.description,
+                    dateCreated: oldTodo.dateCreated,
+                    dateDue: updateData.dateDue || oldTodo.dateDue,
+                    id: oldTodo.id
+                } as TodoItem;
+
+                setTodos([...todosWithoutTarget, newTodo]);
+            }
+        }
+        setUpdateFormVisible(false);
+        updateFeedback(result);
+    };
 
     const getAllTodos = async () => {
         const result = await getItems();
@@ -94,8 +124,13 @@ function App() {
 
     const sortArray = (array: TodoItem[]) => {
         return array.sort((itemOne, itemTwo) => {
-            return isAscending ? itemOne.dateCreated - itemTwo.dateCreated : itemTwo.dateCreated - itemOne.dateCreated;
+            return isAscending ? itemOne.dateCreated.getTime() - itemTwo.dateCreated.getTime() : itemTwo.dateCreated.getTime() - itemOne.dateCreated.getTime();
         });
+    };
+
+    const onUpdateSelectedTodo = (updateData: UpdateData) => {
+        setSelectedTodoData(updateData);
+        setUpdateFormVisible(true);
     };
 
     return (
@@ -147,7 +182,17 @@ function App() {
             >
                 { feedback }
             </Feedback>
-            <List dataTestId={"todo-item-list-container"} data={searchValue ? searchResults : todos} deleteTodo={deleteTodo}/>
+            <List
+                dataTestId={"todo-item-list-container"}
+                data={searchValue ? searchResults : todos}
+                deleteTodo={deleteTodo}
+                updateSelectedTodo={onUpdateSelectedTodo}
+            />
+            <UpdateForm
+                onSubmit={updateTodo}
+                updateData={selectedTodoData}
+                visible={updateFormVisible}
+            />
         </div>
     );
 }

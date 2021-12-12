@@ -49,13 +49,9 @@ export function todoItemExists(id: string): boolean {
 export function updateSingleTodoItem(id: string, updateData: UpdateData): void {
     const todo = todoCache[id];
 
-    const title = updateData.title ? updateData.title : todo.title;
-    const description = updateData.description ? updateData.description : todo.description;
-    const dateDue = updateData.dateDue ? updateData.dateDue : todo.dateDue;
-
-    todo.title = title;
-    todo.description = description;
-    todo.dateDue = dateDue;
+    todo.title = updateData.title || todo.title;
+    todo.description = updateData.description || todo.description;
+    todo.dateDue = updateData.dateDue || todo.dateDue;
 
     todoCache[id] = todo;
 }
