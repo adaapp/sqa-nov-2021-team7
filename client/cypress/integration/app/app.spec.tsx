@@ -1,6 +1,8 @@
 import * as cypress from "cypress";
+import { mount } from "@cypress/react";
 
 const ONE_MINUTE_IN_MILLISECONDS = 60000;
+const BASE_URL = "http://127.0.0.1:3000";
 
 describe('to-do app', () => {
     describe("sorting ", () => {
@@ -14,7 +16,6 @@ describe('to-do app', () => {
                 ]
             }).as("getItems");
 
-            cy.visit('http://localhost:3000');
 
             cy.wait('@getItems');
         })
@@ -74,7 +75,7 @@ describe('to-do app', () => {
                 ]
             }).as("getItems");
 
-            cy.visit('http://localhost:3000');
+            cy.visit(BASE_URL);
 
             cy.wait('@getItems');
         })
@@ -170,7 +171,7 @@ describe('to-do app', () => {
 
     describe("create items", () => {
         beforeEach(() => {
-            cy.visit('http://localhost:3000');
+            cy.visit(BASE_URL);
         });
 
         it('should successfully create a todo item', () => {
@@ -247,7 +248,7 @@ describe('to-do app', () => {
                 ]
             }).as("getItems");
 
-            cy.visit('http://localhost:3000');
+            cy.visit(BASE_URL);
 
             cy.wait('@getItems');
 
@@ -257,7 +258,7 @@ describe('to-do app', () => {
         });
 
         it('should show a list of the latest todo items once the refresh button is clicked', () => {
-            cy.visit('http://localhost:3000');
+            cy.visit(BASE_URL);
 
             cy.intercept('GET', '/todo', {
                 statusCode: 200,
