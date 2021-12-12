@@ -1,0 +1,49 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build:
+    # Run the workflow on a Linux environment
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the source code
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      # Setup Node.js v16
+      - name: Setup NPM
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      # Cache node dependencies for faster install for the next workflow
+      - name: Cache Node Dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-
+
+      # Install the dependencies
+      - name: Install API NPM Dependencies
+        working-directory: ./client
+        run: npm ci
+
+      # Run the eslint check
+      - name: API ESlint check
+        working-directory: ./client
+        run: npm run eslint
+
+      # Run the automated tests
+      - name: Run API Tests
+        working-directory: ./client
+        run: npm test
