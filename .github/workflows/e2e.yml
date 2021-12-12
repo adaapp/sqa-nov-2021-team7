@@ -26,21 +26,8 @@ jobs:
         with:
           node-version: '16'
 
-      # Cache node dependencies for faster install for the next workflow
-      - name: Cache Node Dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: ${{ runner.os }}-node-
-
-      # Install the dependencies
-      - name: Install API NPM Dependencies
-        working-directory: ./client
-        run: npm ci
-
       # Run the Cypress tests
-      - name: Run API Tests
+      - name: Run Cypress e2e Tests
         uses: cypress-io/github-action@v2
         with:
           working-directory: client
