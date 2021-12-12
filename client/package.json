@@ -5,10 +5,11 @@
   "private": true,
   "scripts": {
     "start": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build --minify terser",
     "serve": "vite preview",
     "test": "jest tests",
     "test:watch": "jest tests --watch",
+    "test:coverage": "jest tests --coverage",
     "eslint": "eslint 'src/**/*'",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run-ct",

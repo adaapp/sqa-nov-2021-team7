@@ -11,14 +11,14 @@ describe('to-do app', () => {
                 statusCode: 200,
                 body: [
                     { title: "Title 1", description: "Description 1", dateCreated: new Date().getTime(), dateDue: new Date().getTime() },
-                    { title: "Title 2", description: "Description 2", dateCreated: new Date().getTime() + (5 * ONE_MINUTE_IN_MILLISECONDS), dateDue: new Date().getTime() + (5 * ONE_MINUTE_IN_MILLISECONDS) },
-                    { title: "Title 3", description: "Description 3", dateCreated: new Date().getTime() + (10 * ONE_MINUTE_IN_MILLISECONDS), dateDue: new Date().getTime() + (10 * ONE_MINUTE_IN_MILLISECONDS) }
+                    { title: "Title 2", description: "Description 2", dateCreated: new Date().getTime() + 5 * ONE_MINUTE_IN_MILLISECONDS, dateDue: new Date().getTime() + 5 * ONE_MINUTE_IN_MILLISECONDS },
+                    { title: "Title 3", description: "Description 3", dateCreated: new Date().getTime() + 10 * ONE_MINUTE_IN_MILLISECONDS, dateDue: new Date().getTime() + 10 * ONE_MINUTE_IN_MILLISECONDS }
                 ]
             }).as("getItems");
 
 
             cy.wait('@getItems');
-        })
+        });
 
         it('should sort by ascending order by default', () => {
             cy.get('[data-test-id=sort-button-descending]').should('be.visible');
@@ -58,8 +58,6 @@ describe('to-do app', () => {
             cy.get('[data-test-id=todo-item-0]').contains('Title 1');
             cy.get('[data-test-id=todo-item-1]').contains('Title 2');
             cy.get('[data-test-id=todo-item-2]').contains('Title 3');
-
-
         });
     });
 
@@ -69,16 +67,16 @@ describe('to-do app', () => {
                 statusCode: 200,
                 body: [
                     { title: "Apple", description: "iPhone", dateCreated: new Date().getTime(), dateDue: new Date().getTime() },
-                    { title: "Banana", description: "Cake", dateCreated: new Date().getTime() + (5 * ONE_MINUTE_IN_MILLISECONDS), dateDue: new Date().getTime() + (5 * ONE_MINUTE_IN_MILLISECONDS) },
-                    { title: "Carrot", description: "Juice", dateCreated: new Date().getTime() + (10 * ONE_MINUTE_IN_MILLISECONDS), dateDue: new Date().getTime() + (10 * ONE_MINUTE_IN_MILLISECONDS) },
-                    { title: "Almond", description: "Fruitcake", dateCreated: new Date().getTime() + (10 * ONE_MINUTE_IN_MILLISECONDS), dateDue: new Date().getTime() + (10 * ONE_MINUTE_IN_MILLISECONDS) }
+                    { title: "Banana", description: "Cake", dateCreated: new Date().getTime() + 5 * ONE_MINUTE_IN_MILLISECONDS, dateDue: new Date().getTime() + 5 * ONE_MINUTE_IN_MILLISECONDS },
+                    { title: "Carrot", description: "Juice", dateCreated: new Date().getTime() + 10 * ONE_MINUTE_IN_MILLISECONDS, dateDue: new Date().getTime() + 10 * ONE_MINUTE_IN_MILLISECONDS },
+                    { title: "Almond", description: "Fruitcake", dateCreated: new Date().getTime() + 10 * ONE_MINUTE_IN_MILLISECONDS, dateDue: new Date().getTime() + 10 * ONE_MINUTE_IN_MILLISECONDS }
                 ]
             }).as("getItems");
 
             cy.visit(BASE_URL);
 
             cy.wait('@getItems');
-        })
+        });
 
         it('should search for existing todo items based on title and description that contains the search value', () => {
             cy.get('[data-test-id=search-input]').type("Apple");
@@ -234,7 +232,6 @@ describe('to-do app', () => {
             cy.get('[data-test-id=todo-item-0]').contains('Title');
             cy.get('[data-test-id=todo-item-0]').contains('Description');
             cy.get('[data-test-id=todo-item-0]').contains('07/12/2021, 13:53');
-
         });
     });
 
@@ -286,6 +283,66 @@ describe('to-do app', () => {
             cy.get('[data-test-id=todo-item-0]').contains('Title');
             cy.get('[data-test-id=todo-item-1]').should('be.visible');
             cy.get('[data-test-id=todo-item-1]').contains('Title 2');
+        });
+    });
+
+    describe('delete todo items', () => {
+        const id = 12345;
+
+        beforeEach(() => {
+            cy.visit('http://localhost:3000');
+
+        });
+
+        it('should delete an item when the delete button is clicked', () => {
+            cy.intercept('GET', '/todo', {
+                statusCode: 200,
+                body: [
+                    {
+                        title: 'Title',
+                        description: 'Description',
+                        dateCreated: new Date().getTime(),
+                        dateDue: new Date().getTime(),
+                        id
+                    }
+                ]
+            }).as('getItems');
+
+            cy.wait('@getItems');
+
+            cy.get('[data-test-id=todo-item-list-container]').should('be.visible');
+            cy.get('[data-test-id=todo-item-0]').should('be.visible');
+
+            cy.intercept('DELETE', `/todo/${id}`, {statusCode: 200});
+
+            cy.get('[data-test-id=delete-button-0]').click();
+
+            cy.get('[data-test-id=todo-item-list-container]').should('not.be.visible');
+            cy.get('[data-test-id=todo-item-list-container]').should('exist');
+            cy.get('[data-test-id=todo-item-0]').should('not.exist');
+        });
+
+        it('should only delete the specified item when a button is clicked', () => {
+            cy.intercept('GET', '/todo', {
+                statusCode: 200,
+                body: [
+                    { title: "Title 1", description: "Description 1", dateCreated: new Date().getTime(), dateDue: new Date().getTime(), id},
+                    { title: "Title 2", description: "Description 2", dateCreated: new Date().getTime(), dateDue: new Date().getTime() }
+                ]
+            }).as("getItems");
+
+            cy.wait('@getItems');
+
+            cy.get('[data-test-id=todo-item-list-container]').should('be.visible');
+            cy.get('[data-test-id=todo-item-0]').should('be.visible');
+            cy.get('[data-test-id=todo-item-1]').should('be.visible');
+
+            cy.intercept('DELETE', `/todo/${id}`, {statusCode: 200});
+
+            cy.get('[data-test-id=delete-button-0]').click();
+
+            cy.get('[data-test-id=todo-item-0]').should('be.visible');
+            cy.get('[data-test-id=todo-item-1]').should('not.exist');
         });
     });
 });
