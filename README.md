@@ -11,6 +11,8 @@ https://meet.google.com/jqg-jvhc-uvk
 | Saeed Afzal - **Developer & Tester** | [![Foo](https://cdn4.iconfinder.com/data/icons/iconsimple-logotypes/512/github-16.png)](https://github.com/saeedafzal) |
 
 ## About the Project
+![Frontend Interface](./images/frontend-interface.png)
+
 This repository contains a web application developed using TypeScript that enables users to create, read, update and delete
 todo items. TypeScript was used to enforce strict typing and good coding practices for both the source code and the tests.
 It is a full-stack project that contains a frontend written in the [React](https://reactjs.org/) framework and 
@@ -148,12 +150,7 @@ Unit tests are a tried and tested way of ensuring code logic is working as expec
 be used, Jest is a popular and easy library which has a built-in mocking system and test runner. With integration tests
 covering the bulk of the tests, unit tests will be used for ensuring certain logic works as it should.
 
-For each of these tests, they will be run in an automated way via continuous integration. Since the application code will
-be hosted on GitHub, there is the GitHub Actions tool which can be used to run these tests for each pull request. We can
-also set restrictions on whether a change can be merged based on whether the test is passing or not. This reduces the chances
-of introducing new changes that would break the main branch.
-
-## Test Case
+## Test Cases
 | No. |                                                    Assumptions                                                     |                            Criteria                             |                                                     Steps                                                     |                                     Expected Results                                      |                                                       Actual Results                                                       | Result |
 |:---:|:------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------------------------------:|:------:|
 |  1  |                                         User is accessing the todo client                                          |     Check the create button works as per the specification      | 1. Open the todo client<br/>2. Enter the title<br/>3. Enter the description<br/>4. Click on the create button | The interface should show a successful feedback and the todo item is rendered on the page | The interface shows the successful feedback and a todo item is rendered on the page with the correct title and description |  Pass  |
@@ -162,8 +159,29 @@ of introducing new changes that would break the main branch.
 |  4  |          User is accessing the todo client and has two existing todo items one with the title of "hello"           | Check that the searching feature works as per the specification |                1. Open the todo client<br/>2. Click on the search input<br/>3. Type in "hello"                |              The interface should show the todo item with the "hello" title               |                                  The interface shows the todo item with the "hello" title                                  |  Pass  |
 |  5  | User is accessing the todo client and has two existing todo items one with the created date earlier than the other |  Check that the sorting feature works as per the specification  |                    1. Open the todo client<br/>2. Click on the 'Sort by Ascending' button                     |               The interface should show the todo item created earlier first               |                                  The interface shows the todo item created earlier first                                   |  Pass  |
 
-### Unit tests
-The frontend React components are tested as unit tests. 
+## IEEE Standard
+### 4.8 Problem reporting and corrective action (section 8 of the SQAP)
+#### a) Describe the practices and procedures to be followed for reporting, tracking, and resolving problems or issues identified in both software items and the software development and maintenance process.
+* This project uses GitHub Kanban Board to monitor and track issues.
+* All issues are tagged with labels indicating the type of issue.
+* Issues can be linked to pull requests; when pull requests are merged, the issue is closed automatically.
+
+![GitHub Issue](./images/github-issue.png)
+* Issues can be linked to other issues to manage dependencies between them.
+* It also shows if progress is blocked due to other dependencies.
+* Visual progress can be seen through commits providing the commit message has the issue number.
+* Issues can have a checklist of tasks, which GitHub renders the progress off.
+
+To create an issue, you click on the green "New Issue" button. In the description box, you can type out the details of the
+problem or the work that needs to be done. Labels can be optionally provided to describe what the task entails. To pick up an item,
+you assign the user to it.
+
+#### b) State the specific organizational responsibilities concerned with their implementation.
+The organisation's responsibility is to ensure the application works as expected, and to ensure this, there are checks in place.
+For each of the tests in the application, they will be run in an automated way via continuous integration. Since the application code will
+be hosted on GitHub, there is the GitHub Actions tool which can be used to run these tests for each pull request. We can
+also set restrictions on whether a change can be merged based on whether the test is passing or not. This reduces the chances
+of introducing new changes that would break the main branch.
 
 ## Performance and Accessibility Audit
 
