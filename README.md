@@ -12,7 +12,8 @@ https://meet.google.com/jqg-jvhc-uvk
 
 ## About the Project
 This repository contains a web application developed using TypeScript that enables users to create, read, update and delete
-todo items. It is a full-stack project that contains a frontend written in the [React](https://reactjs.org/) framework and 
+todo items. TypeScript was used to enforce strict typing and good coding practices for both the source code and the tests.
+It is a full-stack project that contains a frontend written in the [React](https://reactjs.org/) framework and 
 is powered by a backend server using the [Express](http://expressjs.com/) framework.
 
 Data is persisted in-memory as a cache. It does not have a database connection, however discussions were made
@@ -35,6 +36,7 @@ during the server's uptime will be lost when the server is shut down or restarte
 
 ## Dependencies
 The project uses the following dependencies to build and test the application:
+- [TypeScript](https://www.typescriptlang.org/) (Strongly typed JavaScript)
 - [Vite](https://vitejs.dev/) (Frontend tooling)
 - [Express](https://expressjs.com/) (Web framework for Node.js)
 - [React](https://reactjs.org/) (JavaScript library for building user interfaces)
@@ -43,6 +45,7 @@ The project uses the following dependencies to build and test the application:
 - [Axios](https://axios-http.com/) (Promise-based HTTP client)
 - [Jest](https://jestjs.io/) (JavaScript testing framework)
 - [Cypress](https://www.cypress.io/) (End-to-End testing framework)
+- [Testing Library](https://testing-library.com/) (A utility library for React testing)
 
 ### Prerequisites
 
@@ -120,6 +123,48 @@ client - Directory for the frontend project
         types - type declarations for data models
     tests - unit and component tests
 ```
+
+## Testing Strategy
+The codebase is written using TypeScript, which is a superset of JavaScript. It ensures that the code is type-safe which makes
+the code easier to read and reduces errors. It also allows the creation of interfaces to define an entity to which the
+rest of the code must adhere to.
+
+For the front-end project, Cypress was chosen for the end-to-end tests. Cypress is an all-in-one end-to-end testing framework
+that includes an assertion and mocking/stubbing library that enables developers to create automated tests for web applications.
+It has a powerful test runner that allows developers to specify how the components behave. It also includes tools that can
+send HTTP requests to an endpoint and assert that components have been rendered on the page. This is a valuable tool that
+assures the API and the frontend are integrated together, and assures regressions are not introduced when new features are
+developed.
+
+For API testing, there are libraries such as Supertest that allows developers to create integration tests by
+running a HTTP request in the code. This works when developing using a test-driven development style as you can set up the
+expected results first, and then develop the API to make the tests pass.
+
+To manually test the APIs, this can be done using a popular API testing tool called Postman. It allows testers to send HTTP
+requests where you can set headers and parameters for each request. You can group and save requests to run again which will
+be useful as there are quite a few API applications in the architecture and being able to test them efficiently is important.
+
+Unit tests are a tried and tested way of ensuring code logic is working as expected. While there are many libraries that can
+be used, Jest is a popular and easy library which has a built-in mocking system and test runner. With integration tests
+covering the bulk of the tests, unit tests will be used for ensuring certain logic works as it should.
+
+For each of these tests, they will be run in an automated way via continuous integration. Since the application code will
+be hosted on GitHub, there is the GitHub Actions tool which can be used to run these tests for each pull request. We can
+also set restrictions on whether a change can be merged based on whether the test is passing or not. This reduces the chances
+of introducing new changes that would break the main branch.
+
+## Test Case
+| No. |                                                    Assumptions                                                     |                            Criteria                             |                                                     Steps                                                     |                                     Expected Results                                      |                                                       Actual Results                                                       | Result |
+|:---:|:------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------------------------------:|:------:|
+|  1  |                                         User is accessing the todo client                                          |     Check the create button works as per the specification      | 1. Open the todo client<br/>2. Enter the title<br/>3. Enter the description<br/>4. Click on the create button | The interface should show a successful feedback and the todo item is rendered on the page | The interface shows the successful feedback and a todo item is rendered on the page with the correct title and description |  Pass  |
+|  2  |                           User is accessing the todo client and has existing todo items                            |       Check that the todo items are rendered on page load       |                                            1. Open the todo client                                            |                The interface should show a list of todo items on the page                 |                                         The interface renders a list of todo items                                         |  Pass  |
+|  3  |                         User is accessing the todo client and has two existing todo items                          |   Check that the delete button works as per the specification   |                 1. Open the todo client<br/>2. Click on the bin icon for the first todo item                  |                 The interface should show a single todo item on the page                  |                         The interface updates automatically and displays a single item on the page                         |  Pass  |
+|  4  |          User is accessing the todo client and has two existing todo items one with the title of "hello"           | Check that the searching feature works as per the specification |                1. Open the todo client<br/>2. Click on the search input<br/>3. Type in "hello"                |              The interface should show the todo item with the "hello" title               |                                  The interface shows the todo item with the "hello" title                                  |  Pass  |
+|  5  | User is accessing the todo client and has two existing todo items one with the created date earlier than the other |  Check that the sorting feature works as per the specification  |                    1. Open the todo client<br/>2. Click on the 'Sort by Ascending' button                     |               The interface should show the todo item created earlier first               |                                  The interface shows the todo item created earlier first                                   |  Pass  |
+
+### Unit tests
+The frontend React components are tested as unit tests. 
+
 ## Performance and Accessibility Audit
 
 ![DEV Performance](./images/DEV%20Performance.PNG)
