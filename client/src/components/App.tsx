@@ -18,6 +18,7 @@ function App() {
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
     const [searchValue, setSearchValue] = useState<string>("");
+    const [dateDue, setDateDue] = useState<Date>(new Date());
     const [todos, setTodos] = useState<TodoItem[]>([]);
     const [searchResults, setSearchResults] = useState<TodoItem[]>([]);
     const [isAscending, setAscending] = useState<boolean>(true);
@@ -52,7 +53,7 @@ function App() {
             title: title,
             description: description,
             dateCreated: new Date().getTime(),
-            dateDue: new Date().getTime(),
+            dateDue: dateDue.getTime(),
             id: ''
         };
 
@@ -139,6 +140,14 @@ function App() {
                 onInput={(event) => {
                     const target = event.target as HTMLInputElement;
                     setDescription(target.value);
+                }}
+            />
+            <input
+                data-test-id={'date-due-input'}
+                type={'datetime-local'}
+                onInput={(event) => {
+                    const target = event.target as HTMLInputElement;
+                    setDateDue(new Date(target.value));
                 }}
             />
             <Input
