@@ -1,5 +1,9 @@
 # sqa-nov-2021-team7
 
+[![API Tests](https://github.com/adaapp/sqa-nov-2021-team7/actions/workflows/api.yml/badge.svg?branch=main)](https://github.com/adaapp/sqa-nov-2021-team7/actions/workflows/api.yml)
+[![Client Tests](https://github.com/adaapp/sqa-nov-2021-team7/actions/workflows/client.yml/badge.svg?branch=main)](https://github.com/adaapp/sqa-nov-2021-team7/actions/workflows/client.yml)
+[![E2E Tests](https://github.com/adaapp/sqa-nov-2021-team7/actions/workflows/e2e.yml/badge.svg?branch=main)](https://github.com/adaapp/sqa-nov-2021-team7/actions/workflows/e2e.yml)
+
 **Google Meet Link**  
 https://meet.google.com/jqg-jvhc-uvk
 
@@ -200,10 +204,19 @@ needing to clarify details.
 
 Most of the pair programming sessions were conducted through Microsoft Teams and outside works hours, Google Meet was used.
 
-### Pull-Requests
-We tried to keep pull requests small and easy to understand. Before a pull request can be merged, all comments have to be
-resolved and all the pipelines need to pass, which includes automated tests and eslint checks. All pull requests require
-two approvals before it can be merged. Any new features that have been developed must have tests associated with it.
+## Pull Requests Review Rules
+Developers often use pull requests to merge changes from the feature branch to the main
+branch. It is a way to have your code changes peer reviewed before it is merged. The peer
+review process varies depending on the team. In this team, a couple of rules were established before
+a pull request can be merged:
+
+* **Green Builds** - There are multiple CI/CD workflows that run when a pull request is created or updated. These builds
+need to pass.
+* **Review Process** - All developers must write tests for the changes they have created. If tests are missing, this gets
+pointed out by the reviewers. This also includes enforcing coding standards.
+* **Approvals** - All changes require 2 approvals.
+* **Stale Approvals** - Any new updates on a pull request removes any existing approvals, and must be requested again.
+* **Merge Conflicts** - Developers must ensure no changes are conflicting with the main branch.
 
 ## Testing Strategy
 The codebase is written using TypeScript, which is a superset of JavaScript. It ensures that the code is type-safe which makes
