@@ -126,6 +126,20 @@ client - Directory for the frontend project
     tests - unit and component tests
 ```
 
+## Pull Requests Review Rules
+Developers often use pull requests to merge changes from the feature branch to the main
+branch. It is a way to have your code changes peer reviewed before it is merged. The peer
+review process varies depending on the team. In this team, a couple of rules were established before
+a pull request can be merged:
+
+* **Green Builds** - There are multiple CI/CD workflows that run when a pull request is created or updated. These builds
+need to pass.
+* **Review Process** - All developers must write tests for the changes they have created. If tests are missing, this gets
+pointed out by the reviewers. This also includes enforcing coding standards.
+* **Approvals** - All changes require 2 approvals.
+* **Stale Approvals** - Any new updates on a pull request removes any existing approvals, and must be requested again.
+* **Merge Conflicts** - Developers must ensure no changes are conflicting with the main branch.
+
 ## Testing Strategy
 The codebase is written using TypeScript, which is a superset of JavaScript. It ensures that the code is type-safe which makes
 the code easier to read and reduces errors. It also allows the creation of interfaces to define an entity to which the
