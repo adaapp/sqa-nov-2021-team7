@@ -1,7 +1,7 @@
 import {MouseEventHandler} from "react";
 import styled from "styled-components";
 import binImgUrl from '../../binIcon.png';
-import editImgUrl from '../../editIcon.png';
+// import editImgUrl from '../../editIcon.png';
 
 interface ButtonProps {
     dataTestId: string
@@ -18,7 +18,6 @@ const ButtonContainer = styled.button`
 const EditIcon = styled.div`
     height: 20px;
     width: 20px;
-    background-image: url(${editImgUrl});
     display: inline-block;
     position: relative;
     bottom: 30px;

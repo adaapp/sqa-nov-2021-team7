@@ -25,6 +25,12 @@ export const UpdateForm = (props: UpdateFormProps) => {
 
     const { onSubmit, updateData, visible } = props;
 
+    //yyyy-MM-ddThh:mm
+    const formatDate = (date: Date) => {
+        // return `${date.getFullYear()}-${date.getMonth()}-${date.getDay()}T${date.getHours()}:${date.getMinutes()}`;
+        return date.toISOString().slice(0, date.toISOString().length - 1);
+    };
+
     return (
         <div style={{display: visible ? 'block' : 'none'}}>
             <FormContainer>
@@ -50,7 +56,7 @@ export const UpdateForm = (props: UpdateFormProps) => {
 
                 <input
                     type={'datetime-local'}
-                    value={dateDue.toLocaleDateString('en-CA') || ''}
+                    value={formatDate(dateDue)}
                     onChange={event => {
                         const target = event.target as HTMLInputElement;
                         setDateDue(new Date(target.value));
