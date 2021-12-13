@@ -1,12 +1,14 @@
 import styled from "styled-components";
 
-import { DeleteButton } from './Button';
+import { DeleteButton, EditButton } from './Button';
 import { TodoItem } from "../types/todo";
+import { UpdateData } from '../../../api/src/core/types/todo';
 
 type ListItemProps = {
     dataTestId: string,
     listItem: TodoItem,
     deleteTodo: (id: string) => Promise<void>,
+    updateSelectedTodo: (updateData: UpdateData) => void
     index: number
 }
 
@@ -24,20 +26,22 @@ const ListItemStyled = styled.div`
 `;
 
 const ListItem = (props: ListItemProps) => {
-    const { dataTestId, listItem, deleteTodo, index } = props;
+    const { dataTestId, listItem, deleteTodo, updateSelectedTodo, index } = props;
+    const { title, description, dateCreated, dateDue, id } = listItem;
 
     return (
         <ListItemStyled data-test-id={dataTestId}>
-            <Text>{listItem.title}</Text>
-            <Text>{listItem.description}</Text>
-            <Text>{formatTime(listItem.dateCreated)}</Text>
-            <Text>{listItem.dateDue ? formatTime(listItem.dateDue) : ""}</Text>
-            <DeleteButton onClick={() => deleteTodo(listItem.id)} dataTestId={"delete-button"} index={index}/>
+            <Text>{title}</Text>
+            <Text>{description}</Text>
+            <Text>{formatTime(dateCreated)}</Text>
+            { listItem.dateDue ? <Text>{formatTime(listItem.dateDue)}</Text> : null }
+            <EditButton onClick={() => updateSelectedTodo({title, description, dateDue, id} as UpdateData)} dataTestId={'edit-button'} index={index}/>
+            <DeleteButton onClick={() => deleteTodo(id)} dataTestId={"delete-button"} index={index}/>
         </ListItemStyled>
     );
 };
 
-const formatTime = (time: number): string => {
+export const formatTime = (time: number): string => {
     const date = new Date(time);
 
     return date.toLocaleString("en-GB", {

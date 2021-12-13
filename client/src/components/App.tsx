@@ -1,11 +1,13 @@
 import {useEffect, useState} from 'react';
-import { createItem, getItems, deleteItem } from "../services/apiservice";
+import { createItem, getItems, deleteItem, updateItem } from "../services/apiservice";
 import { Button } from './Button';
 import { Input }  from './Input';
 import { ErrorResponse, SuccessResponse, TodoItem } from "../types/todo";
+import { UpdateData } from '../../../api/src/core/types/todo';
 
 import styled from "styled-components";
 import List from "./List";
+import { UpdateForm } from './UpdateForm';
 
 const Feedback = styled.div`
 
@@ -19,6 +21,8 @@ function App() {
     const [todos, setTodos] = useState<TodoItem[]>([]);
     const [searchResults, setSearchResults] = useState<TodoItem[]>([]);
     const [isAscending, setAscending] = useState<boolean>(true);
+    const [selectedTodoData, setSelectedTodoData] = useState<UpdateData>({title: '', description: '', dateDue: new Date().getTime()} as UpdateData);
+    const [updateFormVisible, setUpdateFormVisible] = useState<boolean>(false);
 
     useEffect(() => {
         getAllTodos();
@@ -72,6 +76,20 @@ function App() {
         updateFeedback(result);
     };
 
+    const updateTodo = async (updateData: UpdateData) => {
+        const result = await updateItem(updateData);
+
+        if ('id' in result) {
+            const data = result.data as { updatedTodo: TodoItem };
+            const updatedTodo = data.updatedTodo;
+
+            const newList = todos.filter(e => e.id !== e.id);
+            newList.push(updatedTodo);
+            setTodos(newList);
+        }
+        setUpdateFormVisible(false);
+        updateFeedback(result);
+    };
 
     const getAllTodos = async () => {
         const result = await getItems();
@@ -96,6 +114,11 @@ function App() {
         return array.sort((itemOne, itemTwo) => {
             return isAscending ? itemOne.dateCreated - itemTwo.dateCreated : itemTwo.dateCreated - itemOne.dateCreated;
         });
+    };
+
+    const onUpdateSelectedTodo = (updateData: UpdateData) => {
+        setSelectedTodoData(updateData);
+        setUpdateFormVisible(true);
     };
 
     return (
@@ -147,7 +170,17 @@ function App() {
             >
                 { feedback }
             </Feedback>
-            <List dataTestId={"todo-item-list-container"} data={searchValue ? searchResults : todos} deleteTodo={deleteTodo}/>
+            <List
+                dataTestId={"todo-item-list-container"}
+                data={searchValue ? searchResults : todos}
+                deleteTodo={deleteTodo}
+                updateSelectedTodo={onUpdateSelectedTodo}
+            />
+            <UpdateForm
+                onSubmit={updateTodo}
+                updateData={selectedTodoData}
+                visible={updateFormVisible}
+            />
         </div>
     );
 }

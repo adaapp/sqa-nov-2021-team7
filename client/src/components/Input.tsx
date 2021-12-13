@@ -5,7 +5,7 @@ interface InputProps {
     dataTestId: string
     placeholder: string
     value: string
-    onInput: FormEventHandler<HTMLInputElement>
+    onInput?: FormEventHandler<HTMLInputElement>
 }
 
 const InputField = styled.input`

@@ -13,6 +13,8 @@ import {
 import {ErrorResponse, SuccessResponse, TodoItem} from "../../src/types/todo";
 import axios from 'axios';
 import { mocked } from 'ts-jest/utils';
+import { UpdateData } from "../../../api/src/core/types/todo";
+import { update } from "cypress/types/lodash";
 
 jest.mock("axios");
 const mockedAxios = mocked(axios, true);
@@ -119,38 +121,42 @@ describe("apiservice", () => {
     describe("updateItem", () => {
         it("should successfully update an existing todo item", async () => {
             // Given
-            const id = "0";
-            const data: Record<string, string>  = {
-                description: "Updated description"
-            };
-            const expectedResult: TodoItem[] = [
-                { title: "0", description: "Updated description", dateCreated: new Date().getTime(), dateDue: new Date().getTime(), id: '12345' }
-            ];
-            mockedAxios.put.mockResolvedValue({ data: expectedResult, status: OK, statusText: "OK" });
+            const id = '12345';
+            const updatedData = {
+                title: 'Updated title',
+                description: "Updated description",
+                dateDue: new Date().getTime(),
+                id
+            } as UpdateData;
+            const expectedResult = 'Successfully edited an item';
+            mockedAxios.post.mockResolvedValue({ status: OK, statusText: 'OK' });
 
             // When
-            const result = await updateItem(id, data) as TodoItem[];
+
+            const result = await updateItem(updatedData) as SuccessResponse;
 
             // Then
-            expect(mockedAxios.put).toHaveBeenCalledWith(BASE_URL + `/item/${id}`, data);
-            expect(result).toBe(expectedResult);
-            expect(result.length).toBe(1);
+            expect(mockedAxios.post).toHaveBeenCalledWith(BASE_URL + `/todo/${id}`, updatedData);
+            expect(result.message).toBe(expectedResult);
         });
 
         it("should return an error message if item cannot be updated.", async () => {
             // Given
-            const id = "0";
-            const data: Record<string, string>  = {
-                description: "Updated description"
-            };
+            const id = '12345';
+            const updatedData = {
+                title: 'Updated title',
+                description: "Updated description",
+                dateDue: new Date().getTime(),
+                id
+            } as UpdateData;
             const expectedResult = "Failed to update an item; item does not exist.";
-            mockedAxios.put.mockResolvedValue({ data: null, status: BAD_REQUEST, statusText: expectedResult });
+            mockedAxios.post.mockResolvedValue({ data: null, status: BAD_REQUEST, statusText: expectedResult });
 
             // When
-            const result = await updateItem(id, data) as ErrorResponse;
+            const result = await updateItem(updatedData) as ErrorResponse;
 
             // Then
-            expect(mockedAxios.put).toHaveBeenCalledWith(BASE_URL + `/item/${id}`, data);
+            expect(mockedAxios.post).toHaveBeenCalledWith(BASE_URL + `/todo/${id}`, updatedData);
             expect(result.error).toBe(expectedResult);
         });
     });

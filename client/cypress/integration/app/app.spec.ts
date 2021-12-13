@@ -1,6 +1,19 @@
+import { UpdateData } from '../../../../api/src/core/types/todo';
 import * as cypress from "cypress";
 
 const ONE_MINUTE_IN_MILLISECONDS = 60000;
+
+const formatTime = (time: number): string => {
+    const date = new Date(time);
+
+    return date.toLocaleString("en-GB", {
+        day: "numeric",
+        month: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric"
+    });
+};
 
 describe('to-do app', () => {
     describe("sorting ", () => {
@@ -290,7 +303,6 @@ describe('to-do app', () => {
 
         beforeEach(() => {
             cy.visit('http://localhost:3000');
-
         });
 
         it('should delete an item when the delete button is clicked', () => {
@@ -342,6 +354,115 @@ describe('to-do app', () => {
 
             cy.get('[data-test-id=todo-item-0]').should('be.visible');
             cy.get('[data-test-id=todo-item-1]').should('not.exist');
+        });
+    });
+
+    describe('update todo item', () => {
+        const id = 12345;
+
+        it('should update an item when a form is submitted', () => {
+            const dateCreated = new Date().getTime();
+
+            const updatedTitle = 'updated title';
+            const updatedDescription = 'updated description';
+            const updatedDateDue = '2021-04-30T13:00';
+
+            cy.intercept('GET', '/todo', {
+                statusCode: 200,
+                body: [
+                    { title: "Title 1", description: "Description 1", dateCreated: dateCreated, dateDue: new Date().getTime(), id},
+                ]
+            }).as("getItems");
+
+            cy.intercept('POST', `/todo/${id}`, {
+                statusCode: 200,
+                body: {
+                    updatedTodo: {
+                        title: updatedTitle,
+                        description: updatedDescription,
+                        dateCreated: dateCreated,
+                        dateDue: new Date(updatedDateDue).getTime()
+                    }
+                }
+            }).as('updateItem');
+
+            cy.visit('http://localhost:3000');
+
+            cy.wait('@getItems');
+
+            cy.get('[data-test-id=todo-item-list-container]').should('be.visible');
+            cy.get('[data-test-id=todo-item-0]').should('be.visible');
+
+            cy.get('[data-test-id=edit-button-0]').click();
+
+            cy.get('[data-test-id=update-title]').should('be.visible');
+            cy.get('[data-test-id=update-description]').should('be.visible');
+            cy.get('[data-test-id=update-date-due]').should('be.visible');
+
+            cy.get('[data-test-id=update-title]').type(updatedTitle);
+            cy.get('[data-test-id=update-description]').type(updatedDescription);
+            cy.get('[data-test-id=update-date-due]').click()
+                .then(input => {
+                    input[0].dispatchEvent(new Event('input', { bubbles: true }));
+                    input.val(updatedDateDue);
+                });
+
+            cy.get('[data-test-id=update-submit]').click();
+
+            cy.wait('@updateItem');
+
+            cy.get('[data-test-id=todo-item-0]').contains(updatedTitle);
+            cy.get('[data-test-id=todo-item-0]').contains(updatedDescription);
+            cy.get('[data-test-id=todo-item-0]').contains(formatTime(new Date(updatedDateDue).getTime()));
+        });
+
+        it('should only update updated fields', () => {
+            const title = 'title 1';
+            const date = new Date().getTime();
+
+            const updatedDescription = 'updated description';
+
+            cy.intercept('GET', '/todo', {
+                statusCode: 200,
+                body: [
+                    { title, description: "Description 1", dateCreated: date, dateDue: date, id},
+                ]
+            }).as("getItems");
+
+            cy.intercept('POST', `/todo/${id}`, {
+                statusCode: 200,
+                body: {
+                    updatedTodo: {
+                        title: title,
+                        description: updatedDescription,
+                        dateCreated: date,
+                        dateDue: date
+                    }
+                }
+            }).as('updateItem');
+
+            cy.visit('http://localhost:3000');
+
+            cy.wait('@getItems');
+
+            cy.get('[data-test-id=todo-item-list-container]').should('be.visible');
+            cy.get('[data-test-id=todo-item-0]').should('be.visible');
+
+            cy.get('[data-test-id=edit-button-0]').click();
+
+            cy.get('[data-test-id=update-title]').should('be.visible');
+            cy.get('[data-test-id=update-description]').should('be.visible');
+            cy.get('[data-test-id=update-date-due]').should('be.visible');
+
+            cy.get('[data-test-id=update-description]').type(updatedDescription);
+
+            cy.get('[data-test-id=update-submit]').click();
+
+            cy.wait('@updateItem');
+
+            cy.get('[data-test-id=todo-item-0]').contains(title);
+            cy.get('[data-test-id=todo-item-0]').contains(updatedDescription);
+            cy.get('[data-test-id=todo-item-0]').contains(formatTime(date));
         });
     });
 });

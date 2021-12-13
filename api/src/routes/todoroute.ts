@@ -14,7 +14,7 @@ const router = express.Router();
 router.post("/", createTodoItem);
 router.get("/", getAllTodoItems);
 router.delete("/:id?", removeSingleTodoItem);
-router.post("/:id", updateTodoItem);
+router.post("/:id?", updateTodoItem);
 
 function createTodoItem(req: Request, res: Response) {
     const request = req.body;
@@ -61,9 +61,10 @@ function updateTodoItem(req: Request, res: Response) {
     const request = req.body;
 
     if (todoItemExists(id)) {
-        updateSingleTodoItem(id, request);
+        const updatedTodo = updateSingleTodoItem(id, request);
         res.json({
-            status: true
+            status: true,
+            updatedTodo
         });
     } else {
         ERROR_RESPONSE(res, `Item with id ${id} does not exist.`);

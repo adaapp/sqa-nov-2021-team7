@@ -1,6 +1,7 @@
 import {MouseEventHandler} from "react";
 import styled from "styled-components";
-import imgUrl from '../../binIcon.png';
+import binImgUrl from '../../binIcon.png';
+import editImgUrl from '../../editIcon.png';
 
 interface ButtonProps {
     dataTestId: string
@@ -9,18 +10,29 @@ interface ButtonProps {
     index?: number
 }
 
-const DeleteIcon = styled.div`
+const ButtonContainer = styled.button`
+    margin: 5px;
+    width: 200px;
+`;
+
+const EditIcon = styled.div`
     height: 20px;
     width: 20px;
-    background-image: url(${imgUrl});
+    background-image: url(${editImgUrl});
     display: inline-block;
-    position: absolute;
+    position: relative;
+    bottom: 30px;
     background-size: 20px;
 `;
 
-const ButtonContainer = styled.button`
-  margin: 5px;
-  width: 200px;
+const DeleteIcon = styled.div`
+    height: 20px;
+    width: 20px;
+    background-image: url(${binImgUrl});
+    display: inline-block;
+    position: absolute;
+    background-size: 20px;
+    right: 20px;
 `;
 
 export const Button = (props: ButtonProps) => {
@@ -31,6 +43,13 @@ export const Button = (props: ButtonProps) => {
         >
             {props.value}
         </ButtonContainer>
+    );
+};
+
+export const EditButton = (props: ButtonProps) => {
+    const { index, onClick } = props;
+    return (
+        <EditIcon data-test-id={`${props.dataTestId}-${index}`} onClick={onClick} />
     );
 };
 
