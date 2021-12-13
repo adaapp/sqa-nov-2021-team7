@@ -14,9 +14,25 @@ https://meet.google.com/jqg-jvhc-uvk
 * [Dependencies](#dependencies)
   * [Prerequisites](#prerequisites)
 * [Usage](#usage)
+  * [Server](#server---httplocalhost8080)
+  * [Frontend](#frontend---httplocalhost3000)
 * [Running Tests](#running-tests)
+  * [Unit Tests](#unit-tests)
+  * [Integration Tests](#integration-tests)
+  * [End-To-End](#end-to-end-tests)
+  * [Load Tests](#load-tests)
 * [Project Structure](#project-structure)
+  * [API](#api)
+  * [Client](#client)
 * [Workflow](#workflow)
+  * [Ceremonies](#ceremonies)
+    * [Stand-Ups](#stand-ups)
+    * [Story Planning](#story-planning)
+  * [Retrospective](#retrospective)
+  * [Test-Driven Development](#test-driven-development)
+  * [Pair/Group Programming](#pairgroup-programming)
+* [Coding Standards](#coding-standards)
+* [Pull Request Review Rules](#pull-requests-review-rules)
 * [Testing Strategy](#testing-strategy)
 * [Test Cases](#test-cases)
 * [IEEE Standard](#ieee-standard)
@@ -203,6 +219,28 @@ we regularly went on calls, this helped each other understand the change and app
 needing to clarify details.
 
 Most of the pair programming sessions were conducted through Microsoft Teams and outside works hours, Google Meet was used.
+
+## Coding Standards
+Coding standards were a topic discussed among the team to keep the codebase uniformed, 
+readable and maintainable by all members. This was enforced by creating a list of linting rules
+that is checked by the continuous integration pipeline, and is executed every time a developer pushes
+new changes remotely.
+
+### Below are some coding standards that were enforced:
+- Indentation: Enforces all members to have a consistent indentation style. By default, this is set to four spaces 
+or a single tab.
+- Semi-colons: Promotes readability as developers can see where statements end and also prevents potential errors.
+- Unused variables: Keeps the codebase clean and does not waste memory usage.
+- Camelcase: Enforces all developers to create variables and methods in the same format that can be read by
+everyone.
+- Magic numbers: Provides context and reason behind what the variable is about.
+- File names: All test files must be named `*.spec.ts` for Cypress and `*.test.ts` for Jest.
+
+There are two approaches to creating a custom React component. ES6-styled classes can be created that extends
+the Component interface or by creating components in a functional style. This project uses the latest version
+of React, thus the team decided to follow the latter approach as the team behind this framework suggests functional
+components are best practices. Using this approach means there is a performance boost and provides developers access
+to some React hooks that are not present when using classes.
 
 ## Pull Requests Review Rules
 Developers often use pull requests to merge changes from the feature branch to the main
