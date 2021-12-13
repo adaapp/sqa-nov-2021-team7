@@ -84,9 +84,10 @@ function App() {
             const data = result.data as { updatedTodo: TodoItem };
             const updatedTodo = data.updatedTodo;
 
-            const newList = todos.filter(e => e.id !== e.id);
+            const newList = todos.filter(todo => todo.id !== updatedTodo.id);
             newList.push(updatedTodo);
             setTodos(newList);
+            sortArray(todos);
         }
         setUpdateFormVisible(false);
         updateFeedback(result);
