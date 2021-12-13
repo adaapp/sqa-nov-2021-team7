@@ -21,7 +21,7 @@ function App() {
     const [todos, setTodos] = useState<TodoItem[]>([]);
     const [searchResults, setSearchResults] = useState<TodoItem[]>([]);
     const [isAscending, setAscending] = useState<boolean>(true);
-    const [selectedTodoData, setSelectedTodoData] = useState<UpdateData>({title: '', description: '', dateDue: new Date()} as UpdateData);
+    const [selectedTodoData, setSelectedTodoData] = useState<UpdateData>({title: '', description: '', dateDue: new Date().getTime()} as UpdateData);
     const [updateFormVisible, setUpdateFormVisible] = useState<boolean>(false);
 
     useEffect(() => {
@@ -51,8 +51,8 @@ function App() {
         const params: TodoItem = {
             title: title,
             description: description,
-            dateCreated: new Date(),
-            dateDue: new Date(),
+            dateCreated: new Date().getTime(),
+            dateDue: new Date().getTime(),
             id: ''
         };
 
@@ -124,7 +124,7 @@ function App() {
 
     const sortArray = (array: TodoItem[]) => {
         return array.sort((itemOne, itemTwo) => {
-            return isAscending ? itemOne.dateCreated.getTime() - itemTwo.dateCreated.getTime() : itemTwo.dateCreated.getTime() - itemOne.dateCreated.getTime();
+            return isAscending ? itemOne.dateCreated - itemTwo.dateCreated : itemTwo.dateCreated - itemOne.dateCreated;
         });
     };
 

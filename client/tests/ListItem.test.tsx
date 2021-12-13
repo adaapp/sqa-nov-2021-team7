@@ -3,10 +3,15 @@ import "@testing-library/jest-dom";
 import ListItem from "../src/components/ListItem";
 import {TodoItem} from "../src/types/todo";
 import jest from 'jest';
+import { UpdateData } from "../../api/src/core/types/todo";
 
 describe("List", () => {
     it("renders correctly", () => {
-        const mockFn = (id: string): Promise<void> => {
+        const mockDelete = (id: string): Promise<void> => {
+            throw new Error();
+        };
+
+        const mockUpdate = (updateData: UpdateData): void => {
             throw new Error();
         };
 
@@ -18,7 +23,7 @@ describe("List", () => {
             id: '12345'
         };
 
-        const { getByText } = render(<ListItem dataTestId={"todo-item-1"} listItem={data} index={1} deleteTodo={mockFn}/>);
+        const { getByText } = render(<ListItem dataTestId={"todo-item-1"} listItem={data} index={1} deleteTodo={mockDelete} updateSelectedTodo={mockUpdate}/>);
 
         expect(getByText(data.title)).toBeInTheDocument();
         expect(getByText(data.description!)).toBeInTheDocument();

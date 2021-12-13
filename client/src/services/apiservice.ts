@@ -67,6 +67,7 @@ export const updateItem = async (updateData: UpdateData ): Promise<SuccessRespon
     if (status === OK) {
         return <SuccessResponse> {
             data,
+            message: 'Successfully edited an item',
             id: updateData.id
         };
     }

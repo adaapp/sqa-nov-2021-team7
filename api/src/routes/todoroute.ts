@@ -61,10 +61,10 @@ function updateTodoItem(req: Request, res: Response) {
     const request = req.body;
 
     if (todoItemExists(id)) {
-        updateSingleTodoItem(id, request);
+        const updatedTodo = updateSingleTodoItem(id, request);
         res.json({
             status: true,
-            id
+            updatedTodo
         });
     } else {
         ERROR_RESPONSE(res, `Item with id ${id} does not exist.`);

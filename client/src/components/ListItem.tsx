@@ -33,12 +33,24 @@ const ListItem = (props: ListItemProps) => {
         <ListItemStyled data-test-id={dataTestId}>
             <Text>{title}</Text>
             <Text>{description}</Text>
-            <Text>{new Date(dateCreated).toLocaleString()}</Text>
-            <Text>{dateDue ? new Date(dateCreated).toLocaleString() : ""}</Text>
+            <Text>{formatTime(dateCreated)}</Text>
+            <Text>{listItem.dateDue ? formatTime(listItem.dateDue) : ""}</Text>
             <EditButton onClick={() => updateSelectedTodo({title, description, dateDue, id} as UpdateData)} dataTestId={'edit-button'} index={index}/>
             <DeleteButton onClick={() => deleteTodo(id)} dataTestId={"delete-button"} index={index}/>
         </ListItemStyled>
     );
+};
+
+const formatTime = (time: number): string => {
+    const date = new Date(time);
+
+    return date.toLocaleString("en-GB", {
+        day: "numeric",
+        month: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric"
+    });
 };
 
 export default ListItem;

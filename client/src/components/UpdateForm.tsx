@@ -21,14 +21,15 @@ const FormContainer = styled.div`
 export const UpdateForm = (props: UpdateFormProps) => {
     const [title, setTitle] = useState<string>('');
     const [description, setDescription] = useState<string>('');
-    const [dateDue, setDateDue] = useState<Date>(new Date);
+    const [dateDue, setDateDue] = useState<number>(Date.now());
 
     const { onSubmit, updateData, visible } = props;
 
-    //yyyy-MM-ddThh:mm
-    const formatDate = (date: Date) => {
-        // return `${date.getFullYear()}-${date.getMonth()}-${date.getDay()}T${date.getHours()}:${date.getMinutes()}`;
-        return date.toISOString().slice(0, date.toISOString().length - 1);
+    const onSubmitClick = () => {
+        onSubmit({title, description, dateDue, id: updateData.id} as UpdateData);
+        setTitle('');
+        setDescription('');
+        setDateDue(0);
     };
 
     return (
@@ -36,8 +37,8 @@ export const UpdateForm = (props: UpdateFormProps) => {
             <FormContainer>
                 <Input
                     placeholder={'Title'}
-                    dataTestId={''}
-                    value={updateData.title}
+                    dataTestId={'update-title'}
+                    value={title}
                     onInput={event => {
                         const target = event.target as HTMLInputElement;
                         setTitle(target.value);
@@ -46,8 +47,8 @@ export const UpdateForm = (props: UpdateFormProps) => {
 
                 <Input
                     placeholder={'Description'}
-                    dataTestId={''}
-                    value={updateData.description}
+                    dataTestId={'update-description'}
+                    value={description}
                     onInput={event => {
                         const target = event.target as HTMLInputElement;
                         setDescription(target.value);
@@ -56,14 +57,14 @@ export const UpdateForm = (props: UpdateFormProps) => {
 
                 <input
                     type={'datetime-local'}
-                    value={formatDate(dateDue)}
+                    data-test-id={'update-date-due'}
                     onChange={event => {
                         const target = event.target as HTMLInputElement;
-                        setDateDue(new Date(target.value));
+                        setDateDue(new Date(target.value).getTime());
                     }}
                 />
 
-                <button onClick={() => onSubmit({title, description, dateDue, id: updateData.id} as UpdateData)}></button>
+                <button data-test-id={'update-submit'} onClick={() => onSubmitClick()}></button>
             </FormContainer>
         </div>
     );

@@ -46,7 +46,7 @@ export function todoItemExists(id: string): boolean {
     return id in todoCache;
 }
 
-export function updateSingleTodoItem(id: string, updateData: UpdateData): void {
+export function updateSingleTodoItem(id: string, updateData: UpdateData): TodoItem {
     const todo = todoCache[id];
 
     todo.title = updateData.title || todo.title;
@@ -54,4 +54,5 @@ export function updateSingleTodoItem(id: string, updateData: UpdateData): void {
     todo.dateDue = updateData.dateDue || todo.dateDue;
 
     todoCache[id] = todo;
+    return todoCache[id];
 }
