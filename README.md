@@ -7,12 +7,27 @@
 **Google Meet Link**  
 https://meet.google.com/jqg-jvhc-uvk
 
+## Table of Contents
+* [The Team](#the-team)
+* [About the Project](#about-the-project)
+* [Features](#features)
+* [Dependencies](#dependencies)
+  * [Prerequisites](#prerequisites)
+* [Usage](#usage)
+* [Running Tests](#running-tests)
+* [Project Structure](#project-structure)
+* [Workflow](#workflow)
+* [Testing Strategy](#testing-strategy)
+* [Test Cases](#test-cases)
+* [IEEE Standard](#ieee-standard)
+* [Performance and Accessibility Audit](#performance-and-accessibility-audit)
+
 ## The Team
-|    Name    | GitHub |
-|:----------:|:------:|
+|                  Name                   |                                                         GitHub                                                         |
+|:---------------------------------------:|:----------------------------------------------------------------------------------------------------------------------:|
 | Samuel Crispin - **Developer & Tester** | [![Foo](https://cdn4.iconfinder.com/data/icons/iconsimple-logotypes/512/github-16.png)](https://github.com/SamCrispin) |
-| Hou Fai Man - **Developer & Tester** | [![Foo](https://cdn4.iconfinder.com/data/icons/iconsimple-logotypes/512/github-16.png)](https://github.com/houfaiman) |
-| Saeed Afzal - **Developer & Tester** | [![Foo](https://cdn4.iconfinder.com/data/icons/iconsimple-logotypes/512/github-16.png)](https://github.com/saeedafzal) |
+|  Hou Fai Man - **Developer & Tester**   | [![Foo](https://cdn4.iconfinder.com/data/icons/iconsimple-logotypes/512/github-16.png)](https://github.com/houfaiman)  |
+|  Saeed Afzal - **Developer & Tester**   | [![Foo](https://cdn4.iconfinder.com/data/icons/iconsimple-logotypes/512/github-16.png)](https://github.com/saeedafzal) |
 
 ## About the Project
 ![Frontend Interface](./images/frontend-interface.png)
@@ -30,15 +45,6 @@ during the server's uptime will be lost when the server is shut down or restarte
 - Create, Read, Update, and Delete
 - Searching
 - Sorting
-
-## Roadmap
-- Prioritisation
-  - Sorting
-- MongoDB Integration
-- Subtasks
-- Accounts
-- Locations
-- Notifications
 
 ## Dependencies
 The project uses the following dependencies to build and test the application:
@@ -76,7 +82,7 @@ npm install
 npm start
 ```
 
-## Running tests
+## Running Tests
 
 ### Unit Tests
 ```bash
@@ -129,6 +135,74 @@ client - Directory for the frontend project
         types - type declarations for data models
     tests - unit and component tests
 ```
+
+## Workflow
+### Ceremonies
+#### Stand-Ups
+Daily stand-ups were held in the morning to discuss current progress and any blockers. Every day, one member of the team would
+take charge of the meeting, and ask questions and provide suggestions on how to progress. This ceremony ensures that everyone
+is working on a story and makes sure everyone is up-to-date with each other. Typically, the stand-ups ran for 15 minutes on
+average and was conducted remotely using Microsoft Teams during work and Google Meet outside work hours.
+
+#### Story Planning
+There was a single story planning session at the beginning of this project to determine what immediate work needed to be done.
+We created a list of issues and prioritised them based on essentials and enhancements that would be nice to have in the future.
+We worked through the list and created issues as we picked each story up. This helps to prevent a large backlog of stories and
+lets us know which stories to prioritise and work on next.
+
+This is the high-level backlog that stories were created from:
+* Create base documentation
+* Create skeleton template
+* Create CI/CD pipelines
+* Create a todo item
+* Get a single/all todo items
+* Delete a single/all todo items
+* Update a todo item
+* Create load tests
+* Add sorting feature
+* Add searching feature
+* Accessibility testing
+* Update documentation to reflect the latest changes
+* Prioritisation
+  * Sorting
+* MongoDB Integration
+* Subtasks
+* Accounts
+* Locations
+* Notifications
+
+### Retrospective
+A single retrospective was held at the end of two weeks since the start of the project. This allowed us to review what has
+changed since the beginning and identify improvements to our current ways of working. The findings were that our current
+process worked for the team. It was flexible, and catered to each member's individual schedules. It also helped other members
+of the team learn about different tools within the project, for example Cypress was not too familiar with some members, but
+after going over it as a group, everyone was more comfortable with it.
+
+We conducted this meeting using an online web application called [EasyRetro](https://easyretro.io/), which allows participants
+to post feedback and criticisms anonymously. The scrum master went over each point and discussed what went well and the actions to
+take next time.
+
+### Test-Driven Development
+Test-driven development was the approach for creating features. This ensures the code is of high quality and is self-documented.
+It changes the perception of the developer by forcing them to think how users would interact with the interface. Doing so
+enables the developer to create tests that reflect the user flows. For instance, in Cypress tests, developers would think
+about the different actions the user can take, such as adding incorrect inputs. The tests can accommodate these cases, which
+ensures the application logic can handle these scenarios.
+
+### Pair/Group Programming
+Pair programming is the concept of working in pairs or in groups to solve a problem. Typically, one developer is the driver
+and the other is the navigator. The role of the driver is to code the solution while the navigator is to observe, guide and
+proofread the changes. It is an effective way to share knowledge as each team member has different skills and expertise. Working
+in a pair or a group helps to transfer knowledge and also understand the entire application in-depth.
+
+Pair programming was a regular occurrence in the team; there were times when members were not familiar with the tools and frameworks
+involved therefore calls were made to discuss the problem and work through them as a team. For example, some of us were not
+familiar with React, TypeScript or running the Cypress tests, so the team would often go on calls and solve the problem.
+In addition, the work for the front-end and backend was split, so we had to work together to integrate end-to-end. Because
+we regularly went on calls, this helped each other understand the change and approve the pull requests quickly without
+needing to clarify details.
+
+Most of the pair programming sessions were conducted through Microsoft Teams and outside works hours, Google Meet was used.
 
 ## Pull Requests Review Rules
 Developers often use pull requests to merge changes from the feature branch to the main
