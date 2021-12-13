@@ -80,24 +80,12 @@ function App() {
         const result = await updateItem(updateData);
 
         if ('id' in result) {
-            const todosWithoutTarget = todos.filter(todo => {
-                return todo.id !== result.id;
-            });
-            const oldTodo = todos.find(todo => {
-                return todo.id === result.id;
-            });
+            const data = result.data as { updatedTodo: TodoItem };
+            const updatedTodo = data.updatedTodo;
 
-            if (oldTodo) {
-                const newTodo = {
-                    title: updateData.title || oldTodo.title,
-                    description: updateData.description || oldTodo.description,
-                    dateCreated: oldTodo.dateCreated,
-                    dateDue: updateData.dateDue || oldTodo.dateDue,
-                    id: oldTodo.id
-                } as TodoItem;
-
-                setTodos([...todosWithoutTarget, newTodo]);
-            }
+            const newList = todos.filter(e => e.id !== e.id);
+            newList.push(updatedTodo);
+            setTodos(newList);
         }
         setUpdateFormVisible(false);
         updateFeedback(result);

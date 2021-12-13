@@ -34,14 +34,14 @@ const ListItem = (props: ListItemProps) => {
             <Text>{title}</Text>
             <Text>{description}</Text>
             <Text>{formatTime(dateCreated)}</Text>
-            <Text>{listItem.dateDue ? formatTime(listItem.dateDue) : ""}</Text>
+            { listItem.dateDue ? <Text>{formatTime(listItem.dateDue)}</Text> : null }
             <EditButton onClick={() => updateSelectedTodo({title, description, dateDue, id} as UpdateData)} dataTestId={'edit-button'} index={index}/>
             <DeleteButton onClick={() => deleteTodo(id)} dataTestId={"delete-button"} index={index}/>
         </ListItemStyled>
     );
 };
 
-const formatTime = (time: number): string => {
+export const formatTime = (time: number): string => {
     const date = new Date(time);
 
     return date.toLocaleString("en-GB", {
