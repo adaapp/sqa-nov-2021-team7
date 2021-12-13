@@ -126,6 +126,28 @@ client - Directory for the frontend project
     tests - unit and component tests
 ```
 
+## Coding Standards
+Coding standards were a topic discussed among the team to keep the codebase uniformed, 
+readable and maintainable by all members. This was enforced by creating a list of linting rules
+that is checked by the continuous integration pipeline, and is executed every time a developer pushes
+new changes remotely.
+
+### Below are some coding standards that were enforced:
+- Indentation: Enforces all members to have a consistent indentation style. By default, this is set to four spaces 
+or a single tab.
+- Semi-colons: Promotes readability as developers can see where statements end and also prevents potential errors.
+- Unused variables: Keeps the codebase clean and does not waste memory usage.
+- Camelcase: Enforces all developers to create variables and methods in the same format that can be read by
+everyone.
+- Magic numbers: Provides context and reason behind what the variable is about.
+- File names: All test files must be named `*.spec.ts` for Cypress and `*.test.ts` for Jest.
+
+There are two approaches to creating a custom React component. ES6-styled classes can be created that extends
+the Component interface or by creating components in a functional style. This project uses the latest version
+of React, thus the team decided to follow the latter approach as the team behind this framework suggests functional
+components are best practices. Using this approach means there is a performance boost and provides developers access
+to some React hooks that are not present when using classes.
+
 ## Testing Strategy
 The codebase is written using TypeScript, which is a superset of JavaScript. It ensures that the code is type-safe which makes
 the code easier to read and reduces errors. It also allows the creation of interfaces to define an entity to which the
