@@ -1,0 +1,41 @@
+name: E2E Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build:
+    # Run the workflow on a Linux environment
+    runs-on: ubuntu-latest
+    container: cypress/browsers:node14.17.0-chrome88-ff89
+
+    steps:
+      # Checkout the source code
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      # Setup Node.js v16
+      - name: Setup NPM
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      # Run the Cypress tests
+      - name: Run Cypress e2e Tests
+        uses: cypress-io/github-action@v2
+        with:
+          working-directory: client
+          start: npm start
+          wait-on: "http://localhost:3000"
+          wait-on-timeout: 120
+          browser: chrome
+          record: true
+          parallel: true
+          group: "UI - Chrome"
+          spec: cypress/integration/app/*

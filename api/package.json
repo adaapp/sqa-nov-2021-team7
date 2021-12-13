@@ -7,9 +7,9 @@
     "start": "ts-node src/server.ts",
     "start:dev": "nodemon",
     "eslint": "eslint 'src/**/*'",
-    "test": "NODE_ENV=test jest",
-    "test:watch": "NODE_ENV=test jest --watch",
-    "test:coverage": "NODE_ENV=test jest --coverage"
+    "test": "cross-env NODE_ENV=test jest",
+    "test:watch": "cross-env NODE_ENV=test jest --watch",
+    "test:coverage": "cross-env NODE_ENV=test jest --coverage"
   },
   "author": "Hou Fai Man, Saeed Afzal, Samuel Crispin",
   "license": "ISC",
@@ -27,6 +27,7 @@
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "eslint": "^8.3.0",
     "jest": "^27.3.1",
     "nodemon": "^2.0.15",
