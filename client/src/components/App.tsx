@@ -48,6 +48,10 @@ function App() {
         setSearchResults(state);
     }, [searchValue]);
 
+    useEffect(() => {
+        sortArray(todos);
+    }, [todos]);
+
     const createTodo = async () => {
         const params: TodoItem = {
             title: title,
@@ -87,7 +91,6 @@ function App() {
             const newList = todos.filter(todo => todo.id !== updatedTodo.id);
             newList.push(updatedTodo);
             setTodos(newList);
-            sortArray(todos);
         }
         setUpdateFormVisible(false);
         updateFeedback(result);
