@@ -34,16 +34,16 @@ jobs:
           restore-keys: ${{ runner.os }}-node-
 
       # Install the dependencies
-      - name: Install API NPM Dependencies
+      - name: Install Client NPM Dependencies
         working-directory: ./client
         run: npm ci
 
       # Run the eslint check
-      - name: API ESlint check
+      - name: Client ESlint check
         working-directory: ./client
         run: npm run eslint
 
       # Run the automated tests
-      - name: Run API Tests
+      - name: Run Client Tests
         working-directory: ./client
         run: npm test

@@ -23,7 +23,8 @@ const
     dateCreatedString = formatTime(dateCreated),
     dateDue = dateCreated + ONE_MINUTE_IN_MILLISECONDS,
     dateDueString = formatTime(dateDue),
-    id = '12345';
+    id = '12345',
+    newId = '54321';
 
 describe('to-do app', () => {
     describe("sorting ", () => {
@@ -349,7 +350,8 @@ describe('to-do app', () => {
                         title: newTitle,
                         description: newDescription,
                         dateCreated: dateCreated,
-                        dateDue: new Date(updatedDateDue).getTime()
+                        dateDue: updatedDateDue,
+                        id: id
                     }
                 }
             }).as('updateItem');
@@ -381,7 +383,7 @@ describe('to-do app', () => {
 
             cy.get('[data-test-id=todo-item-0]').contains(newTitle);
             cy.get('[data-test-id=todo-item-0]').contains(newDescription);
-            cy.get('[data-test-id=todo-item-0]').contains(formatTime(new Date(updatedDateDue).getTime()));
+            cy.get('[data-test-id=todo-item-0]').contains(formatTime(updatedDateDue));
         });
 
         it('should only update updated fields', () => {
@@ -395,7 +397,9 @@ describe('to-do app', () => {
             cy.intercept('POST', `/todo/${id}`, {
                 statusCode: 200,
                 body: {
-                    updatedTodo: { title, description: newDescription, dateCreated, dateDue }
+                    updatedTodo: {
+                        title, description: newDescription, dateCreated, dateDue, id
+                    }
                 }
             }).as('updateItem');
 
@@ -422,6 +426,67 @@ describe('to-do app', () => {
             cy.get('[data-test-id=todo-item-0]').contains(newDescription);
             cy.get('[data-test-id=todo-item-0]').contains(dateDueString);
             cy.get('[data-test-id=todo-item-0]').contains(dateCreatedString);
+        });
+
+        it('should only update updated todo item', () => {
+            const
+                anotherNewDateCreated = dateCreated + 10 * ONE_MINUTE_IN_MILLISECONDS,
+                anotherNewDateDue = dateDue + 15 * ONE_MINUTE_IN_MILLISECONDS;
+
+            cy.intercept('GET', '/todo', {
+                statusCode: 200,
+                body: [
+                    { title, description, dateCreated, dateDue, id },
+                    { title: newTitle, description: newDescription, dateCreated: anotherNewDateCreated, dateDue: anotherNewDateDue, newId }
+                ]
+            }).as("getItems");
+
+            const
+                expectedTitle = 'Another new title',
+                expectedDescription = 'Another new description';
+
+            cy.intercept('POST', `/todo/${id}`, {
+                statusCode: 200,
+                body: {
+                    updatedTodo: {
+                        title: expectedTitle,
+                        description: expectedDescription,
+                        dateCreated: dateCreated,
+                        dateDue: dateDue,
+                        id: id
+                    }
+                }
+            }).as('updateItem');
+
+            cy.visit('http://localhost:3000');
+
+            cy.wait('@getItems');
+
+            cy.get('[data-test-id=todo-item-list-container]').should('be.visible');
+            cy.get('[data-test-id=todo-item-0]').should('be.visible');
+
+            cy.get('[data-test-id=edit-button-0]').click();
+
+            cy.get('[data-test-id=update-title]').should('be.visible');
+            cy.get('[data-test-id=update-description]').should('be.visible');
+            cy.get('[data-test-id=update-date-due]').should('be.visible');
+
+            cy.get('[data-test-id=update-title]').type(expectedTitle);
+            cy.get('[data-test-id=update-description]').type(expectedDescription);
+
+            cy.get('[data-test-id=update-submit]').click();
+
+            cy.wait('@updateItem');
+
+            cy.get('[data-test-id=todo-item-0]').contains(expectedTitle);
+            cy.get('[data-test-id=todo-item-0]').contains(expectedDescription);
+            cy.get('[data-test-id=todo-item-0]').contains(dateCreatedString);
+            cy.get('[data-test-id=todo-item-0]').contains(dateDueString);
+
+            cy.get('[data-test-id=todo-item-1]').contains(newTitle);
+            cy.get('[data-test-id=todo-item-1]').contains(newDescription);
+            cy.get('[data-test-id=todo-item-1]').contains(formatTime(anotherNewDateCreated));
+            cy.get('[data-test-id=todo-item-1]').contains(formatTime(anotherNewDateDue));
         });
     });
 });

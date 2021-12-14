@@ -129,7 +129,7 @@ describe("apiservice", () => {
                 id
             } as UpdateData;
             const expectedResult = 'Successfully edited an item';
-            mockedAxios.post.mockResolvedValue({ status: OK, statusText: 'OK' });
+            mockedAxios.post.mockResolvedValue({ status: OK, statusText: 'OK', data: { updatedTodo: updatedData } });
 
             // When
 
