@@ -85,11 +85,10 @@ function App() {
         const result = await updateItem(updateData);
 
         if ('id' in result) {
-            const data = result.data as { updatedTodo: TodoItem };
-            const updatedTodo = data.updatedTodo;
+            const data = result.data as TodoItem;
 
-            const newList = todos.filter(todo => todo.id !== updatedTodo.id);
-            newList.push(updatedTodo);
+            const newList = todos.filter(todo => todo.id !== data.id);
+            newList.push(data);
             setTodos(newList);
         }
         setUpdateFormVisible(false);

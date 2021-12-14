@@ -23,7 +23,8 @@ const
     dateCreatedString = formatTime(dateCreated),
     dateDue = dateCreated + ONE_MINUTE_IN_MILLISECONDS,
     dateDueString = formatTime(dateDue),
-    id = '12345';
+    id = '12345',
+    newId = '54321';
 
 describe('to-do app', () => {
     describe("sorting ", () => {
@@ -349,7 +350,8 @@ describe('to-do app', () => {
                         title: newTitle,
                         description: newDescription,
                         dateCreated: dateCreated,
-                        dateDue: updatedDateDue
+                        dateDue: updatedDateDue,
+                        id: id
                     }
                 }
             }).as('updateItem');
@@ -395,7 +397,9 @@ describe('to-do app', () => {
             cy.intercept('POST', `/todo/${id}`, {
                 statusCode: 200,
                 body: {
-                    updatedTodo: { title, description: newDescription, dateCreated, dateDue }
+                    updatedTodo: {
+                        title, description: newDescription, dateCreated, dateDue, id
+                    }
                 }
             }).as('updateItem');
 
@@ -433,20 +437,23 @@ describe('to-do app', () => {
                 statusCode: 200,
                 body: [
                     { title, description, dateCreated, dateDue, id },
-                    { title: newTitle, description: newDescription, dateCreated: anotherNewDateCreated, dateDue: anotherNewDateDue }
+                    { title: newTitle, description: newDescription, dateCreated: anotherNewDateCreated, dateDue: anotherNewDateDue, newId }
                 ]
             }).as("getItems");
 
             const
                 expectedTitle = 'Another new title',
-                expectedDescription = 'Another new desctiption';
+                expectedDescription = 'Another new description';
 
             cy.intercept('POST', `/todo/${id}`, {
                 statusCode: 200,
                 body: {
                     updatedTodo: {
                         title: expectedTitle,
-                        description: expectedDescription
+                        description: expectedDescription,
+                        dateCreated: dateCreated,
+                        dateDue: dateDue,
+                        id: id
                     }
                 }
             }).as('updateItem');
